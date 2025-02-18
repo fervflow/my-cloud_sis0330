@@ -17,6 +17,8 @@ class UsuarioModel extends Authenticatable
      *
      * @var list<string>
      */
+    protected $table = 'usuarios';
+    protected $primaryKey = 'id';
     protected $fillable = [
         'nombre',
         'apellidos',
