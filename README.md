@@ -84,13 +84,17 @@ Ahora debes generar la `APP_KEY`, para ello debes entrar a la linea de comandos 
 ```sh
 docker exec -it laravel_app sh
 ```
-Una vez dentro ejecuta el siguiente comando:
+Una vez dentro, necesitamos descargar las dependencias, para ellor ejecuta el siguiente comando:
+```sh
+composer install
+```
+Ahora procedemos a crear la app key:
 ```sh
 php artisan key:generate
 ```
 
 ### 4. Ejecurar las migraciones
-Entra otra vez en el shell del contenedor de laravel, si no estás ahí:
+Entra otra vez en el shell del contenedor de laravel, si es que ya no estás ahí:
 ```sh
 docker exec -it laravel_app sh
 ```

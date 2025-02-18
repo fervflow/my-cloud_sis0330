@@ -13,6 +13,9 @@ RUN apk add --no-cache \
 # Copy Composer binary from the official Composer image
 COPY --from=composer/composer:latest-bin /composer /usr/bin/composer
 
+# Set the Composer timeout to 15 minutes
+RUN composer config --global process-timeout 900
+
 # Set the working directory
 WORKDIR /var/www
 
