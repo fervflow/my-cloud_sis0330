@@ -2,22 +2,22 @@
 
 namespace App\Services;
 
-use App\Models\Usuario;
+use App\Models\UsuarioModel;
 
 class UsuarioService
 {
     public function getAllUsers()
     {
-        return Usuario::all();
+        return UsuarioModel::all();
     }
 
     public function findUserByEmail(string $email)
     {
-        return Usuario::where('correo', $email)->first();
+        return UsuarioModel::where('correo', $email)->first();
     }
 
     public function createUser(array $data)
     {
-        return Usuario::create($data);
+        return UsuarioModel::create($data);
     }
 }
