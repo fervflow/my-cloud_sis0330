@@ -22,9 +22,6 @@ RUN composer config --global process-timeout 1800
 # Mark working directory as a safe directory for git from the container
 RUN git config --global --add safe.directory /var/www
 
-# Install node dependencies to avoid warnings
-RUN npm install
-
 # Set the working directory
 WORKDIR /var/www
 

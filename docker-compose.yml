@@ -21,6 +21,7 @@ services:
       - app
     networks:
       - app-network
+    command: sh -c "npm install && php-fpm"
 
   postgres:
     image: postgres:17-alpine
