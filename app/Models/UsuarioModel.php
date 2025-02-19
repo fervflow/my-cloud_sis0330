@@ -20,7 +20,7 @@ class UsuarioModel extends Authenticatable
     protected $table = 'usuarios';
     protected $primaryKey = 'id';
     protected $fillable = [
-        'nombre',
+        'nombres',
         'apellidos',
         'correo',
         'password',
