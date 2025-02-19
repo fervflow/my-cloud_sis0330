@@ -2,41 +2,37 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\UsuarioService;
+// use App\Services\UsuarioService;
 use Illuminate\Http\Request;
 use App\Core\ListaUsuario;
 use Illuminate\Http\JsonResponse;
 
 class UsuarioController extends Controller
 {
-    protected $usuarioService;
+    // protected $usuarioService;
 
-    private ListaUsuario $usuarios;
+    // private ListaUsuario $usuarios;
+    protected $listaUsuario;
 
-    /*public function __construct(UsuarioService $usuarioService)
+    public function __construct(ListaUsuario $listaUsuario)
     {
-        $this->usuarioService = $usuarioService;
+        // $this->usuarioService = $usuarioService;
+        $this->listaUsuario = $listaUsuario;
     }
 
     public function index(): JsonResponse
     {
-        return response()->json($this->usuarioService->getAllUsers());
+        // return response()->json($this->usuarioService->getAllUsers());
+        return response()->json($this->listaUsuario->listar());
+        //view();
+        //dd($listaProducto,$listaProducto[0]->ConvertToProducto());
     }
 
     public function store(Request $request): JsonResponse
     {
-        $usuario = $this->usuarioService->createUser($request->all());
+        $usuario = $this->listaUsuario->agregar($request->all());
         return response()->json($usuario, 201);
-    }*/
-
-    public function __construct(){
-        $this->usuarios = new ListaUsuario();
     }
-    public function index(){
 
-        $listaUsuario = $this->usuarios->list();
-        //view();
-        //dd($listaProducto,$listaProducto[0]->ConvertToProducto());
-    }
 }
 

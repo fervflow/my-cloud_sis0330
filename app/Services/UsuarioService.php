@@ -6,7 +6,7 @@ use App\Models\UsuarioModel;
 
 class UsuarioService
 {
-    public function getAllUsers()
+    public function getUsuarios()
     {
         return UsuarioModel::all();
     }
@@ -20,4 +20,6 @@ class UsuarioService
     {
         return UsuarioModel::create($data);
     }
+
+    public function edit(){}
 }

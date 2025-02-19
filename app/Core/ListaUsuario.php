@@ -1,18 +1,21 @@
-<?php 
+<?php
 namespace App\Core;
 use App\Core\Usuario;
 use App\Core\Services\UsuarioService;
 
-class ListaProducto{
+class ListaUsuario{
     private Array $listaUsuario;
-    private UsuarioService $service;
+    private UsuarioService $usuarioService;
     public function __construct() {
-        $this->service = new UsuarioService();
+        $this->usuarioService = new UsuarioService();
     }
-    public function add(){}
-    public function list(){
-        return $this->service->getUsuarios();
+
+    public function agregar(){}
+
+    public function listar(){
+        return $this->usuarioService->getUsuarios();
     }
-    public function edit(){}
+
+    public function editar(){}
 
 }
