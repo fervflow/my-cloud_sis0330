@@ -6,6 +6,7 @@
     "customizations": {
         "vscode": {
             "extensions": [
+                "ms-azuretools.vscode-docker",
                 "devsense.phptools-vscode",
                 "neilbrayfield.php-docblocker",
                 "onecentlin.laravel-blade",

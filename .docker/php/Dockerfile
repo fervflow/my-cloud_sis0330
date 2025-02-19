@@ -9,6 +9,8 @@ RUN apk add --no-cache \
     libpq \
     git \
     postgresql-dev \
+    nodejs \
+    npm \
     && docker-php-ext-install pdo pdo_pgsql
 
 # Copy Composer binary from the official Composer image
