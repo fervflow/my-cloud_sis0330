@@ -24,7 +24,7 @@ class UsuarioTest extends TestCase
     public function test_add_usuario(): void
     {
         $listaUsuario = new ListaUsuario();
-        $newUsuario = new Usuario('Juan', 'Perez', 'sistemas@gmail.com', '-', '_', 8);
+        $newUsuario = new Usuario('1', 'Juan', 'Perez', 'sistemas@gmail.com', '-', '_', 8);
         $usuarioExpect = $listaUsuario->add($newUsuario);
         $this->assertModelExists($usuarioExpect);
     }
@@ -51,18 +51,25 @@ class UsuarioTest extends TestCase
         $this->assertEquals(count($lista), count($listaExpect));
     }
 
-    public function test_ChangeRoleCallsServiceAndReturnsUpdatedUser()
+    public function test_ChangeRoleCallsServiceAndReturnsUpdatedUser(): void
     {
-        $usuario = UsuarioModel::factory()->create([
-            'rol' => 'user',
-        ]);
+        // $usuario = UsuarioModel::factory()->create([
+        //     'nombres' => 'Fer',
+        //     'apellidos' => 'Vel',
+        //     'correo' => '123@ejemplo.com',
+        //     'password' => 'admin123',
+        //     'rol' => 'user',
+        //     'espacio_disponible' => 0,
+        // ]);
+        $usuarioInsert = new Usuario('1', 'Juan', 'Perez', 'sistemas@gmail.com', '-', '_', 8);
 
-        $listaUsuarios = new ListaUsuario(new UsuarioService());
+        $listaUsuarios = new ListaUsuario();
+        $usuario = $listaUsuarios->add($usuarioInsert);
 
-        $updatedUser = $listaUsuarios->changeRole($usuario->id, 'admin');
+        $updatedUser = $listaUsuarios->changeRole($usuario->getId(), 'admin');
 
         $this->assertDatabaseHas('usuarios', [
-            'id' => $usuario->id,
+            'id' => $usuarioInsert->getId(),
             'rol' => 'admin'
         ]);
 
