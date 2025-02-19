@@ -31,7 +31,7 @@ class UsuarioController extends Controller
     public function store(Request $request): JsonResponse
     {
         $usuario = $this->listaUsuario->agregar($request->all());
-        return response()->json($usuario, 201);
+        return response()->json(data: $usuario, 201);
     }
 
 }
