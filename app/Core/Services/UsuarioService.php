@@ -21,9 +21,18 @@ class UsuarioService
         return UsuarioModel::where('correo', $email)->first();
     }
 
-    public function createUser(array $data)
+    public function changeRole(string $id, string $rol)
     {
-        return UsuarioModel::create($data);
+        $usuario = UsuarioModel::find($id);
+
+        if (!$usuario) {
+            return null;
+        }
+
+        $usuario->rol = $rol;
+        $usuario->save();
+
+        return $usuario;
     }
 
     public function edit()

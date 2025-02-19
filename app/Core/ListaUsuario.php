@@ -26,4 +26,9 @@ class ListaUsuario
     {
     }
 
+    public function changeRole(string $id, string $rol)
+    {
+        return $this->usuarioService->changeRole($id, $rol);
+    }
+
 }
