@@ -1,0 +1,36 @@
+{
+    "name": "Laravel Dev Container",
+    "dockerComposeFile": "../docker-compose.yml",
+    "service": "app",
+    "workspaceFolder": "/var/www",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "devsense.phptools-vscode",
+                "neilbrayfield.php-docblocker",
+                "onecentlin.laravel-blade",
+                "shufo.vscode-blade-formatter",
+                "amiralizadeh9480.laravel-extra-intellisense",
+                "absszero.vscode-laravel-goto",
+                "ryannaddy.laravel-artisan",
+                "esbenp.prettier-vscode",
+                "bradlc.vscode-tailwindcss",
+                "editorconfig.editorconfig",
+                "teeseal.ayu-legacy",
+                "atommaterial.a-file-icon-vscode"
+            ],
+            "settings": {
+                "php.validate.executablePath": "/usr/local/bin/php",
+                "editor.fontFamily": "'JetBrainsMono NF', 'CaskaydiaCove NF', 'Droid Sans Mono', 'Consolas', 'monospace', monospace",
+                "editor.tabSize": 4,
+                "editor.formatOnSave": true,
+                "files.autoSave": "afterDelay",
+                "files.autoSaveDelay": 1000,
+                "editor.cursorBlinking": "expand",
+                "editor.cursorWidth": 3,
+                "workbench.colorTheme": "Ayu Mirage (Legacy)",
+                "workbench.iconTheme": "a-file-icon-vscode"
+            }
+        }
+    }
+}
