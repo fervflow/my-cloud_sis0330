@@ -1,6 +1,7 @@
 <?php
 namespace App\Core;
 use App\Core\Usuario;
+use App\Core\Validar;
 use App\Core\Services\UsuarioService;
 
 class ListaUsuario{
@@ -9,13 +10,14 @@ class ListaUsuario{
     public function __construct() {
         $this->usuarioService = new UsuarioService();
     }
-
-    public function agregar(){}
-
-    public function listar(){
+    public function add(Usuario $usu){
+        if(!Validar::isnull($usu->getNombre())  && !Validar::isnull($usu->getcorreo()))
+            return $this->usuarioService->add($usu);
+        return null;
+    }
+    public function list(){
         return $this->usuarioService->getUsuarios();
     }
-
-    public function editar(){}
+    public function edit(){}
 
 }
