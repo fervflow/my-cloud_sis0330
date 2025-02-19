@@ -17,6 +17,9 @@ COPY --from=composer/composer:latest-bin /composer /usr/bin/composer
 # Set the Composer timeout to 30 minutes
 RUN composer config --global process-timeout 1800
 
+# Mark working directory as a safe directory for git from the container
+RUN git config --global --add safe.directory /var/www
+
 # Set the working directory
 WORKDIR /var/www
 

@@ -7,6 +7,23 @@ Una replica de un servicio de almacenamiento en la nube.
 ## Introducción
 El proyecto está diseñado para ejecutarse en contenedores de docker y así **evitar** la instalación de php, composer, laravel, postgresql, etc. en el sistema operativo del host y así lograr un entorno de desarrollo uniforme entre los integrantes.
 
+## Desarrollo
+Si ya tienes el proyecto instalado y configurado con las variables de entorno y demás, entonces **antes de empezar a escribir código** debes tener en cuenta:
+
+### Poner los contenedoes en funcionamiento
+- Si hubo cambios en los archivos de docker, debes reconstruir los contenedores:
+    ```sh
+    docker compose up -d --build
+    ```
+- Si no hubo ningún cambio en los archivos de docker, simplemente:
+    ```sh
+    docker compose up -d
+    ```
+- Al terminar el trabajo es recomendable cerrar los contenedores:
+    ```sh
+    docker compose down
+    ```
+
 ## Instalación y ejecución
 
 ### _Prerequisitos_
@@ -53,7 +70,7 @@ cd my-cloud_sis0330
 ```
 Posteriormente construye y levanta los contenedores con el comando:
 ```sh
-docker compose -f ./docker/docker-componse.yml up -d
+docker compose up -d
 ```
 Si todo está correctamente configurado puedes comprobar que hay tres contenedores ejecutandoce con el comando:
 ```sh
@@ -63,11 +80,11 @@ docker ps
 ### 3. Configurar las variables de entorno de Laravel
 Para poder construir el proyecto debes configurar algunas variables de entorno, para ello debes copiar el archivo `.env.example` en otro archivo `.env`, puedes hacerlo con el siguiente comando, desde la carpeta raíz del proyecto (si no cambiaste a otra carpeta durante el proceso no hay problema):
 ```sh
-cp ./my-cloud/.env.example ./my-cloud/.env
+cp ./.env.example ./.env
 ```
 Ahora debes editar el archivo `.env` que acabas de generar con tu editor de preferencia, si usas vscode ya puedes abrir el proyecto con:
 ```sh
-code my-cloud &
+code . &
 ```
 Buscas y abres el archivo `.env`, adentro reemplaza las líneas 24 a 29 con:
 ```js
