@@ -1,5 +1,18 @@
 {
     "recommendations": [
-        "ms-vscode-remote.remote-containers"
+        "ms-azuretools.vscode-docker",
+        "devsense.phptools-vscode",
+        "neilbrayfield.php-docblocker",
+        "st-pham.php-refactor-tool",
+        "onecentlin.laravel-blade",
+        "shufo.vscode-blade-formatter",
+        "amiralizadeh9480.laravel-extra-intellisense",
+        "absszero.vscode-laravel-goto",
+        "ryannaddy.laravel-artisan",
+        "esbenp.prettier-vscode",
+        "bradlc.vscode-tailwindcss",
+        "editorconfig.editorconfig",
+        "teeseal.ayu-legacy",
+        "atommaterial.a-file-icon-vscode"
     ]
 }

@@ -1,0 +1,11 @@
+{
+    "editor.fontFamily": "'JetBrainsMono NF', 'CaskaydiaCove NF', 'Droid Sans Mono', 'Consolas', 'monospace', monospace",
+    "editor.tabSize": 4,
+    "files.autoSave": "afterDelay",
+    "files.autoSaveDelay": 1000,
+    "editor.formatOnSave": true,
+    "editor.cursorBlinking": "expand",
+    "editor.cursorWidth": 3,
+    "workbench.colorTheme": "Default Dark Modern",
+    "workbench.iconTheme": "vs-seti"
+}
