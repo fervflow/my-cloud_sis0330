@@ -11,15 +11,15 @@ El proyecto está diseñado para ejecutarse en contenedores de docker y así **e
 Si ya tienes el proyecto instalado y configurado con las variables de entorno y demás, entonces **antes de empezar a escribir código** debes tener en cuenta:
 
 ### Poner los contenedoes en funcionamiento
-- Si hubo cambios en los archivos de docker, debes reconstruir los contenedores:
+- Si hubo **cambios en los archivos de docker**, debes reconstruir los contenedores:
     ```sh
-    docker compose up -d --build
+    docker compose up --build
     ```
 - Si no hubo ningún cambio en los archivos de docker, simplemente:
     ```sh
-    docker compose up -d
+    docker compose up
     ```
-- Al terminar el trabajo es recomendable cerrar los contenedores:
+- Al terminar el trabajo es recomendable cerrar los contenedores, si es que los inicaiste en modo desatendido (`-d`):
     ```sh
     docker compose down
     ```
@@ -64,71 +64,52 @@ Dirigete a la carpeta donde quieres clonar el proyecto y clónalo ejecutando el 
     ```
 
 ### 2. Construir los contenedores
-Una vez clonado el proyecto, dirígete a carpeta clonada con:
-```sh
-cd my-cloud_sis0330
-```
-Posteriormente construye y levanta los contenedores con el comando:
-```sh
-docker compose up -d
-```
-Si todo está correctamente configurado puedes comprobar que hay tres contenedores ejecutandoce con el comando:
+1. Una vez clonado el proyecto, dirígete a la carpeta clonada con:
+    ```sh
+    cd my-cloud_sis0330
+    ```
+2. Posteriormente construye, levanta los contenedores y el servidor con el comando:
+    ```sh
+    docker compose up
+    ```
+Esto hará todo el trabajo de configuración de las variables de entorno, instalación de dependencias de Composer, dependencias de Node y migraciones gracias a un script de entrada embebido.
+
+Los logs del servidor estarán en ejecución, si todo está correcto verás un mensaje casi al final similar a este:
+
+    ===>>> CONFIGURACIÓN INICIAL COMPLETADA.
+
+Puedes abrir otra pestaña o ventana de terminal y comprobar que hay tres contenedores ejecutandoce con el comando:
 ```sh
 docker ps
 ```
+_**NOTA:**_
+Si tuviste algún **problema** al descargar los contenedores, puedes intentar limpiar todos los archivos de docker inutilizados ejecutando el siguiente comando:
+```sh
+docker system prune -a
+```
+Ten en cuenta que esto removerá:
+- Todos los contenedores detenidos.
+- Todas las redes internas de docker no usadas por ningún contenedor.
+- Todas las imagenes sin conetenedores asociados.
+- Todo el cache de builds.
 
-### 3. Configurar las variables de entorno de Laravel
-Para poder construir el proyecto debes configurar algunas variables de entorno, para ello debes copiar el archivo `.env.example` en otro archivo `.env`, puedes hacerlo con el siguiente comando, desde la carpeta raíz del proyecto (si no cambiaste a otra carpeta durante el proceso no hay problema):
+Posteriormente reintentar el build:
 ```sh
-cp ./.env.example ./.env
-```
-Ahora debes editar el archivo `.env` que acabas de generar con tu editor de preferencia, si usas vscode ya puedes abrir el proyecto con:
-```sh
-code . &
-```
-Buscas y abres el archivo `.env`, adentro reemplaza las líneas 24 a 29 con:
-```js
-DB_CONNECTION=pgsql
-DB_HOST=postgres
-DB_PORT=5432
-DB_DATABASE=mycloud
-DB_USERNAME=mycloud
-DB_PASSWORD=mycloud123
-```
-Guarda los cambios.
-
-Ahora debes generar la `APP_KEY`, para ello debes entrar a la linea de comandos del contenedor que alberga la aplicación de laravel, con el comando:
-```sh
-docker exec -it laravel_app sh
-```
-Una vez dentro, necesitamos descargar las dependencias, para ellor ejecuta el siguiente comando:
-```sh
-composer install
-```
-Ahora procedemos a crear la app key:
-```sh
-php artisan key:generate
+docker compose up
 ```
 
-### 4. Ejecurar las migraciones
-Entra otra vez en el shell del contenedor de laravel, si es que ya no estás ahí:
-```sh
-docker exec -it laravel_app sh
-```
-
-Ejecuta el comando para correr las migraciones:
-```sh
-php artisan migrate
-```
-
-### 5. Comprobar el funcionamiento
+### 3. Comprobar el funcionamiento
 Con esto ya debería estar todo configurado y listo para trabajar, puedes comprobar que la aplicacińo de laravel está ejecutandose correctamente entrando desde un navegador a la dirección del localhost: [http://localhost](http://localhost)
 
 También puedes verificar la base de datos conectandote a ella desde cualquier cliente SQL como DBeaver o PGAdmin, utilizando los valores de conexión especificados anteriormente.
 
+### 4. Configurar el editor de código
+Puedes abrir el proyecto con `VS Code`, al iniciar aparecerá una ventana emergente que solicita instalar las extensiones recomendadas, puedes aceptarlo para tener una experiencia de desarrollo uniforme.
+
+También se establecerán algunas configuraciones, esto solo afecta este entorno de trabajo y no tu configuración personal de `VS Code`.
 
 ## Notas
-Recuerda que para ejecutar cualquier comando de `composer` o `artisan` para crear los archivos de laravel, crear y ejecutar migraciones, etc. debes ejecutarlos dentro del shell del contenedor de laravel, ingresando con:
+Recuerda que para ejecutar cualquier comando de `composer` o `artisan` para crear los archivos de laravel, crear y ejecutar migraciones, etc. debes ejecutarlos dentro del shell del contenedor de laravel, es recomendable abrir otra pestaña o ventana de terminal dedicado a esto e ingresando con:
 ```sh
 docker exec -it laravel_app sh
 ```
