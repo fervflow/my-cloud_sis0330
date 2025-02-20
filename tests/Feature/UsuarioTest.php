@@ -24,21 +24,30 @@ class UsuarioTest extends TestCase
     public function test_add_usuario(): void
     {
         $listaUsuario = new ListaUsuario();
-        $newUsuario = new Usuario('1', 'Juan', 'Perez', 'sistemas@gmail.com', '-', '_', 8);
+        $newUsuario = new Usuario(
+            id: '1',
+            nombres: 'Juan',
+            apellidos: 'Perez',
+            correo: 'sistemas@gmail.com',
+            password: '-',
+            rol: '_',
+            espacio_disponible: 8
+        );
+
         $usuarioExpect = $listaUsuario->add($newUsuario);
         $this->assertModelExists($usuarioExpect);
     }
     public function test_not_add_usuario_data_null(): void
     {
         $listaUsuario = new ListaUsuario();
-        $newUsuario = new Usuario(null, null, null, null, null, null);
+        $newUsuario = new Usuario(null, null, null, null, null, null, null);
         $usuarioExpect = $listaUsuario->add($newUsuario);
         $this->assertEquals($usuarioExpect, null);
     }
     public function test_not_add_usuario_data_cant_null(): void
     {
         $listaUsuario = new ListaUsuario();
-        $newUsuario = new Usuario('Juan', null, null, null, null, null);
+        $newUsuario = new Usuario(null, 'Juan', null, null, null, null, null);
         $usuarioExpect = $listaUsuario->add($newUsuario);
 
         $this->assertEquals($usuarioExpect, null);
@@ -51,22 +60,45 @@ class UsuarioTest extends TestCase
         $this->assertEquals(count($lista), count($listaExpect));
     }
 
-    public function test_ChangeRoleCallsServiceAndReturnsUpdatedUser(): void
+    public function test_EncontrarUsuarioPorEmail(): void
     {
-        // $usuario = UsuarioModel::factory()->create([
-        //     'nombres' => 'Fer',
-        //     'apellidos' => 'Vel',
-        //     'correo' => '123@ejemplo.com',
-        //     'password' => 'admin123',
-        //     'rol' => 'user',
-        //     'espacio_disponible' => 0,
-        // ]);
-        $usuarioInsert = new Usuario('1', 'Juan', 'Perez', 'sistemas@gmail.com', '-', '_', 8);
+        $usuarioNuevo = new Usuario(
+            id: '1',
+            nombres: 'Juan',
+            apellidos: 'Perez',
+            correo: 'sistemas@gmail.com',
+            password: '-',
+            rol: '_',
+            espacio_disponible: 8
+        );
 
         $listaUsuarios = new ListaUsuario();
-        $usuario = $listaUsuarios->add($usuarioInsert);
+        $listaUsuarios->add($usuarioNuevo);
 
-        $updatedUser = $listaUsuarios->changeRole($usuario->getId(), 'admin');
+        $usuarioEncontrado = $listaUsuarios->encontrarPorEmail($usuarioNuevo->getcorreo());
+
+        $this->assertNotNull($usuarioEncontrado, 'User should be found');
+        $this->assertEquals($usuarioNuevo->getcorreo(), $usuarioEncontrado->correo, 'Email es el mismo');
+        $this->assertEquals($usuarioNuevo->getNombres(), $usuarioEncontrado->nombres, 'Nombres son iguales');
+        $this->assertEquals($usuarioNuevo->getApellidos(), $usuarioEncontrado->apellidos, 'Apellidos son iguales');
+    }
+
+    public function test_CambiarRolYRetornarUsuarioActualizado(): void
+    {
+        $usuarioInsert =new Usuario(
+            id: '3',
+            nombres: 'Juan',
+            apellidos: 'Perez',
+            correo: 'sistemas@gmail.com',
+            password: '-',
+            rol: '_',
+            espacio_disponible: 8
+        );
+
+        $listaUsuarios = new ListaUsuario();
+        $listaUsuarios->add($usuarioInsert);
+
+        $updatedUser = $listaUsuarios->changeRole($usuarioInsert->getId(), 'admin');
 
         $this->assertDatabaseHas('usuarios', [
             'id' => $usuarioInsert->getId(),
