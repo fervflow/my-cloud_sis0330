@@ -15,3 +15,7 @@ Route::prefix('usuarios')->group(function () {
 Route::get('/home', function () {
     return view('Home.index');
 });
+
+Route::get('/pool', function () {
+    return view('Login.index');
+});
