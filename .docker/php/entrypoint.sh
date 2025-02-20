@@ -21,10 +21,10 @@ if [ ! -f "./.docker/setup_done" ]; then
     sed -i 's/^# \?DB_PASSWORD=.*/DB_PASSWORD=mycloud123/' .env
 
     # Install composer dependencies
-    if [ ! -d "vendor" ]; then
-        echo "Instalando dependencias de Composer..."
-        composer install
-    fi
+    # if [ ! -d "vendor" ]; then
+    echo "Instalando dependencias de Composer..."
+    composer install
+    # fi
 
     # Generate application key
     if [ ! -f "storage/oauth-private.key" ]; then
