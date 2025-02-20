@@ -3,14 +3,16 @@ namespace App\Core;
 
 class Usuario
 {
+    private $id = '';
     private $nombres = '';
     private $apellidos = '';
     private $correo = '';
     private $password = '';
     private $rol = '';
     private $espacio_disponible = '';
-    public function __construct($nombres, $apellidos, $correo, $password, $rol, $espacio_disponible)
+    public function __construct($id = "", $nombres, $apellidos, $correo, $password, $rol, $espacio_disponible)
     {
+        $this->id = $id;
         $this->nombres = $nombres;
         $this->apellidos = $apellidos;
         $this->correo = $correo;
@@ -26,6 +28,7 @@ class Usuario
     public function toArray()
     {
         return [
+            'id' => $this->id,
             'nombres' => $this->nombres,
             'apellidos' => $this->apellidos,
             'correo' => $this->correo,
@@ -33,6 +36,15 @@ class Usuario
             'rol' => $this->rol,
             'espacio_disponible' => $this->espacio_disponible,
         ];
+    }
+
+    public function getId()
+    {
+        return $this->id;
+    }
+    public function setId($id)
+    {
+        $this->id = $id;
     }
     public function getNombres()
     {

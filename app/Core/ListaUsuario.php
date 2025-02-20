@@ -26,4 +26,14 @@ class ListaUsuario
     {
     }
 
+    public function encontrarPorEmail(string $email)
+    {
+        return $this->usuarioService->findUserByEmail($email);
+    }
+
+    public function changeRole(string $id, string $rol)
+    {
+        return $this->usuarioService->changeRole($id, $rol);
+    }
+
 }
