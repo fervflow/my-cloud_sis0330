@@ -13,7 +13,7 @@ if [ ! -f "./.docker/setup_done" ]; then
     # Update database configuration in .env file
     echo "Actualizando la configuración de la BD..."
 
-    sed -i 's/^# \?DB_CONNECTION=.*/DB_CONNECTION=pgsql/' .env
+    sed -i 's/^DB_CONNECTION=.*/DB_CONNECTION=pgsql/' .env
     sed -i 's/^# \?DB_HOST=.*/DB_HOST=postgres/' .env
     sed -i 's/^# \?DB_PORT=.*/DB_PORT=5432/' .env
     sed -i 's/^# \?DB_DATABASE=.*/DB_DATABASE=mycloud/' .env
