@@ -11,10 +11,12 @@ use App\Models\UsuarioModel;
 
 class UsuarioControllerTest extends TestCase
 {
+    use RefreshDatabase, WithFaker;
+
     /**
      * A basic feature test example.
      */
-   /* public function test_example(): void
+    public function test_example(): void
     {
         $response = $this->get('/');
 
@@ -23,17 +25,26 @@ class UsuarioControllerTest extends TestCase
     public function test_lista_usuarios(): void
     {
 
-        $lista = (UsuarioModel::get());
+        $lista = UsuarioModel::get();
         $cantidad = count($lista);
-        $listaUsuario=new ListaUsuario();
-        $listaExpect=$listaUsuario->list();
+        $listaUsuario = new ListaUsuario();
+        $listaExpect = $listaUsuario->list();
         $this->assertCount($cantidad, $listaExpect);
     }
     public function test_create_usuario():void{
         $listaUsuario = new ListaUsuario();
-        $usuario = new Usuario('Juan','Perez','sistemas@gmail.com');
+        $usuario = new Usuario(
+            id: '1',
+            nombres: 'Juan',
+            apellidos: 'Perez',
+            correo: 'sistemas@gmail.com',
+            password: '-',
+            rol: '_',
+            espacio_disponible: 8
+        );
+
         $usuExpect = $listaUsuario->add($usuario);
         $this->assertModelExists($usuExpect);
         //$this->assertTrue(true);
-    }*/
+    }
 }

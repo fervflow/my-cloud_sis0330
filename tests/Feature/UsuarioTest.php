@@ -11,10 +11,11 @@ use App\Models\UsuarioModel;
 
 class UsuarioTest extends TestCase
 {
+    use RefreshDatabase, WithFaker;
+    
     /**
      * A basic feature test example.
      */
-    use RefreshDatabase, WithFaker;
     public function test_example(): void
     {
         $response = $this->get('/');
@@ -86,7 +87,7 @@ class UsuarioTest extends TestCase
     public function test_CambiarRolYRetornarUsuarioActualizado(): void
     {
         $usuarioInsert =new Usuario(
-            id: '3',
+            id: '4',
             nombres: 'Juan',
             apellidos: 'Perez',
             correo: 'sistemas@gmail.com',
