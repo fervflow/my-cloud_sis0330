@@ -13,6 +13,8 @@ use App\Models\ArchivoModel;
 
 class ArchivoTest extends TestCase
 {
+    use RefreshDatabase, WithFaker;
+
     /**
      * A basic feature test example.
      */
