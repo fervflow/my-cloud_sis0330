@@ -11,3 +11,7 @@ Route::prefix('usuarios')->group(function () {
     Route::get('/', [UsuarioController::class, 'index']);
     Route::post('/', [UsuarioController::class, 'store']);
 });
+
+Route::get('/home', function () {
+    return view('Home.index');
+});
