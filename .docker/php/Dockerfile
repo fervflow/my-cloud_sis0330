@@ -22,10 +22,16 @@ RUN composer config --global process-timeout 1800
 # Mark working directory as a safe directory for git from the container
 RUN git config --global --add safe.directory /var/www
 
+# Copy entrypoint script and give execution permissions
+COPY ./entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
 # Set the working directory
 WORKDIR /var/www
 
 # Expose port for PHP-FPM
 EXPOSE 9000
 
+# Set entrypoint and CMD
+ENTRYPOINT ["/entrypoint.sh"]
 CMD ["php-fpm"]
