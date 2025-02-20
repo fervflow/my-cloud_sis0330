@@ -1,6 +1,6 @@
 <?php
 namespace App\Core;
-use App\Core\Archivos;
+use App\Core\Archivo;
 use App\Core\Validar;
 use App\Core\Services\ArchivoService;
 
@@ -12,7 +12,7 @@ class ListaArchivos
     {
         $this->archivoService = new ArchivoService();
     }
-    public function add(Archivos $arch)
+    public function add(Archivo $arch)
     {
         if (!Validar::isnull($arch->getNombres()) && !Validar::isnull($arch->getfecha_expiracion()))
             return $this->archivoService->add($arch);

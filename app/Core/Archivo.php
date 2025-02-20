@@ -1,6 +1,6 @@
 <?php
 namespace App\Core;
-class Archivos{
+class Archivo{
     private $nombre = '';
     private $ruta = '';
     private $tamaño = '';

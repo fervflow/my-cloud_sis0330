@@ -7,7 +7,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 use App\Core\ListaArchivos;
-use App\Core\Archivos;
+use App\Core\Archivo;
 use App\Models\ArchivoModel;
 
 
@@ -26,13 +26,13 @@ class ArchivoTest extends TestCase
     }
     public function test_add_archivo():void{
         $listaArchivo = new ListaArchivos();
-        $newArchivo = new Archivos('documento','rutass',2,'texto',19/02/2025);
+        $newArchivo = new Archivo('documento','rutass',2,'texto',19/02/2025);
         $archivoExpect = $listaArchivo->add($newArchivo);
         $this->assertModelExists($archivoExpect);
     }
     public function test_not_add_archivoss_data_null():void{
         $listaArchivo = new ListaArchivos();
-        $newArchivo = new Archivos(null,null,null,null,null);
+        $newArchivo = new Archivo(null,null,null,null,null);
         $archivoExpect = $listaArchivo->add($newArchivo);
         $this->assertEquals($archivoExpect,null);
     }
