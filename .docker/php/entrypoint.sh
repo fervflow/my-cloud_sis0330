@@ -1,6 +1,6 @@
 #!/bin/sh
 
-if [ ! -f ".setup_done" ]; then
+if [ ! -f "./.docker/setup_done" ]; then
         # Navigate to the Laravel application directory
     cd /var/www
 
@@ -12,14 +12,13 @@ if [ ! -f ".setup_done" ]; then
 
     # Update database configuration in .env file
     echo "Actualizando la configuración de la BD..."
-    sed -i '/^DB_CONNECTION=/,+5d' .env && tee -a .env > /dev/null <<EOL
-DB_CONNECTION=pgsql
-DB_HOST=postgres
-DB_PORT=5432
-DB_DATABASE=mycloud
-DB_USERNAME=mycloud
-DB_PASSWORD=mycloud123
-EOL
+
+    sed -i 's/^DB_CONNECTION=.*/DB_CONNECTION=pgsql/' .env
+    sed -i 's/^#\?DB_HOST=.*/DB_HOST=postgres/' .env
+    sed -i 's/^#\?DB_PORT=.*/DB_PORT=5432/' .env
+    sed -i 's/^#\?DB_DATABASE=.*/DB_DATABASE=mycloud/' .env
+    sed -i 's/^#\?DB_USERNAME=.*/DB_USERNAME=mycloud/' .env
+    sed -i 's/^#\?DB_PASSWORD=.*/DB_PASSWORD=mycloud123/' .env
 
     # Install composer dependencies
     if [ ! -d "vendor" ]; then
@@ -44,7 +43,7 @@ EOL
     fi
 
     # Create flag to indicate setup is done
-    touch .setup_done
+    touch ./.docker/.setup_done
 
     echo "Configuración inicial completada."
 fi
