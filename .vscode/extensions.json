@@ -1,5 +1,6 @@
 {
     "recommendations": [
+        "ms-ceintl.vscode-language-pack-es",
         "ms-azuretools.vscode-docker",
         "devsense.phptools-vscode",
         "neilbrayfield.php-docblocker",

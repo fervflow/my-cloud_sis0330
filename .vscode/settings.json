@@ -6,6 +6,9 @@
     "editor.formatOnSave": true,
     "editor.cursorBlinking": "expand",
     "editor.cursorWidth": 3,
-    "workbench.colorTheme": "Default Dark Modern",
-    "workbench.iconTheme": "vs-seti"
+    "window.density.editorTabHeight": "compact",
+    "workbench.editor.wrapTabs": true,
+    "editor.wordWrap": "on",
+    "workbench.colorTheme": "Ayu Mirage (Legacy)",
+    "workbench.iconTheme": "a-file-icon-vscode",
 }
