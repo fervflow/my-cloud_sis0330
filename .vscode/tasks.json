@@ -5,6 +5,11 @@
             "label": "Docker Server",
             "type": "shell",
             "command": "docker compose up",
+            "windows":{
+                "options": {
+                    "shell": { "executable": "powershell" },
+                }
+            },
             "isBackground": true,
             "presentation": {
                 "focus": true,
@@ -22,7 +27,10 @@
                 "command": "until docker ps --format '{{.Names}}' | grep -q '^laravel_app$'; do sleep 2; done && docker exec -it laravel_app sh",
             },
             "windows":{
-                "command": "while (-not (docker ps --format '{{.Names}}' | Select-String -Pattern '^laravel_app$')) { Start-Sleep -Seconds 2 } && docker exec -it laravel_app sh"
+                "command": "while (-not (docker ps --format '{{.Names}}' | Select-String -Pattern '^laravel_app$')) { Start-Sleep -Seconds 2 }; docker exec -it laravel_app sh",
+                "options": {
+                    "shell": { "executable": "powershell" },
+                }
             },
             "isBackground": true,
             "presentation": {
