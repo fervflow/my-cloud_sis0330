@@ -6,9 +6,40 @@
     "editor.formatOnSave": true,
     "editor.cursorBlinking": "expand",
     "editor.cursorWidth": 3,
+    "editor.minimap.enabled": false,
+    "editor.wordWrap": "on",
     "window.density.editorTabHeight": "compact",
     "workbench.editor.wrapTabs": true,
-    "editor.wordWrap": "on",
     "workbench.colorTheme": "Ayu Mirage (Legacy)",
     "workbench.iconTheme": "a-file-icon-vscode",
+
+    "terminal.integrated.profiles.linux": {
+        "Docker Server": {
+            "path": "bash",
+            "args": ["-c", "docker compose up"],
+            "icon": "server",
+        },
+        "Laravel Container": {
+            "path": "bash",
+            "args": ["-c", "docker exec -it laravel_app sh"],
+            "icon": "terminal-bash",
+        },
+    },
+    "terminal.integrated.profiles.windows": {
+        "Docker Server": {
+            "path": "powershell.exe",
+            "args": ["-NoExit", "-Command", "docker compose up"],
+            "icon": "server",
+        },
+        "Laravel Container": {
+            "path": "powershell.exe",
+            "args": ["-NoExit", "-Command", "docker exec -it laravel_app sh"],
+            "icon": "terminal-linux",
+        }
+    },
+
+    "terminal.integrated.splitCwd": "workspaceRoot",
+    "terminal.integrated.tabs.enabled": true,
+    "terminal.integrated.tabs.showActiveTerminal": "always"
+
 }

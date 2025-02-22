@@ -1,0 +1,38 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Docker Server",
+            "type": "shell",
+            "command": "docker compose up",
+            "isBackground": true,
+            "presentation": {
+                "focus": true,
+                "panel": "dedicated",
+                "close": true,
+            },
+            "icon": {"id": "server"},
+            "runOptions": {"runOn": "folderOpen"},
+            "detail": "Construir e inicializar los contenedores de Docker.",
+        },
+        {
+            "label": "Laravel Shell",
+            "type": "shell",
+            "linux":{
+                "command": "until docker ps --format '{{.Names}}' | grep -q '^laravel_app$'; do sleep 2; done && docker exec -it laravel_app sh",
+            },
+            "windows":{
+                "command": "while (-not (docker ps --format '{{.Names}}' | Select-String -Pattern '^laravel_app$')) { Start-Sleep -Seconds 2 } && docker exec -it laravel_app sh"
+            },
+            "isBackground": true,
+            "presentation": {
+                "focus": false,
+                "panel": "dedicated",
+                "close": false,
+            },
+            "icon": {"id": "terminal-bash"},
+            "runOptions": {"runOn": "folderOpen"},
+            "detail": "Abrir el shell del contenedor de Laravel.",
+        },
+    ]
+}
