@@ -12,10 +12,21 @@ class ListaUsuario
     {
         $this->usuarioService = new UsuarioService();
     }
-    public function add(Usuario $usu)
+    public function add(Usuario $usuario, string $password)
     {
-        if (!Validar::isnull($usu->getNombres()) && !Validar::isnull($usu->getcorreo()))
+        /*if (!Validar::isnull($usu->getNombres()) && !Validar::isnull($usu->getcorreo()))
             return $this->usuarioService->add($usu);
+        return null;*/
+        if (!empty($usuario->getNombres()) && !empty($usuario->getApellidos()) && !empty($usuario->getCorreo()) && !empty($password)) {
+            return $this->usuarioService->createUser([
+                'nombres' => $usuario->getNombres(),
+                'apellidos' => $usuario->getApellidos(),
+                'correo' => $usuario->getCorreo(),
+                'password' => $password,
+                'rol' => 'usuario',
+                'espacio_disponible' => $usuario->getEspacioDisponible(),
+            ]);
+        }
         return null;
     }
     public function list()
