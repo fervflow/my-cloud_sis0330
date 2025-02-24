@@ -63,6 +63,10 @@
                 </button>
             </div>
         </aside>
+        <form action="{{ route('logout') }}" method="POST" class="mt-4">
+            @csrf
+            <button type="submit" class="btn btn-danger">Cerrar sesión</button>
+        </form>
         <!-- Main Content -->
         @yield('content')
     </div>

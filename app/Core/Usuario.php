@@ -1,7 +1,8 @@
 <?php
 namespace App\Core;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class Usuario
+class Usuario extends Authenticatable
 {
     private $id = '';
     private $nombres = '';
@@ -86,6 +87,17 @@ class Usuario
     {
         $this->rol = $rol;
     }
+
+
+    public function getEspacioDisponible()
+    {
+        return $this->espacio_disponible;
+    }
+
+    public function setEspacioDisponible($espacio_disponible)
+    {
+            $this->espacio_disponible = $espacio_disponible;
+    }
     public function getespacio_disponible()
     {
         return $this->espacio_disponible;
@@ -93,6 +105,10 @@ class Usuario
     public function setespacio_disponible($espacio_disponible)
     {
         $this->espacio_disponible = $espacio_disponible;
+    }
+    public function getAuthPassword()
+    {
+        return $this->password;
     }
 
 }

@@ -54,7 +54,8 @@ return [
 
         'stack' => [
             'driver' => 'stack',
-            'channels' => explode(',', env('LOG_STACK', 'single')),
+            'channels' => ['stderr'],
+            //'channels' => explode(',', env('LOG_STACK', 'single')),
             'ignore_exceptions' => false,
         ],
 
@@ -95,14 +96,17 @@ return [
         ],
 
         'stderr' => [
-            'driver' => 'monolog',
-            'level' => env('LOG_LEVEL', 'debug'),
-            'handler' => StreamHandler::class,
-            'formatter' => env('LOG_STDERR_FORMATTER'),
-            'with' => [
-                'stream' => 'php://stderr',
-            ],
-            'processors' => [PsrLogMessageProcessor::class],
+            //'driver' => 'monolog',
+            'driver' => 'single',
+            'path' => 'php://stderr',
+            'level' => 'debug',
+            //'level' => env('LOG_LEVEL', 'debug'),
+            //'handler' => StreamHandler::class,
+            //'formatter' => env('LOG_STDERR_FORMATTER'),
+            //'with' => [
+            //    'stream' => 'php://stderr',
+            //],
+            //'processors' => [PsrLogMessageProcessor::class],
         ],
 
         'syslog' => [
