@@ -14,8 +14,8 @@
   <div class="max-w-lg w-full bg-white shadow-lg rounded-lg p-8">
     <!-- Título -->
     <h2 class="text-3xl font-semibold text-center text-gray-800 mb-6">CREAR CUENTA</h2>
-    <form action="#" method="POST">
-
+    <form action="/register" method="POST">
+        @csrf
       <!-- Campo de nombres -->
       <div class="mb-4">
         <label for="nombres" class="block text-gray-700">Nombres</label>
@@ -44,8 +44,8 @@
           class="w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 mt-2">
       </div>
       <div class="mb-4">
-        <label for="password" class="block text-gray-700">Confirmar contraseña</label>
-        <input type="password" id="password" name="password" required
+        <label for="password_confirmation" class="block text-gray-700">Confirmar contraseña</label>
+        <input type="password_confirmation" id="password_confirmation" name="password_confirmation" required
           class="w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 mt-2">
       </div>
 

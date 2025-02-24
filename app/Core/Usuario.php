@@ -87,6 +87,17 @@ class Usuario extends Authenticatable
     {
         $this->rol = $rol;
     }
+
+
+    public function getEspacioDisponible()
+    {
+        return $this->espacio_disponible;
+    }
+
+    public function setEspacioDisponible($espacio_disponible)
+    {
+            $this->espacio_disponible = $espacio_disponible;
+    }
     public function getespacio_disponible()
     {
         return $this->espacio_disponible;

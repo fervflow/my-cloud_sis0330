@@ -29,4 +29,8 @@ Route::get('/adminuser', function () {
 Route::get('/login', [LoginController::class, 'index'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
 
+Route::get('/register', [LoginController::class, 'showRegisterForm']);
+Route::post('/register', [LoginController::class, 'register']);
+
+
 Route::post('/logout', function () {Auth::logout();return redirect('/login');})->name('logout');

@@ -46,6 +46,9 @@
         </div>
 
       </form>
+      <div class="footer">
+        <p>¿No tienes cuenta? <a href="/register">Regístrate aquí</a></p>
+    </div>
     </div>
   </div>
 </body>
