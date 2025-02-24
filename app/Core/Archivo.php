@@ -1,27 +1,53 @@
 <?php
 namespace App\Core;
+
+use App\Models\ArchivoModel;
+
 class Archivo{
+    private string $id;
     private $nombre = '';
     private $ruta = '';
-    private $tamaño = '';
+    private $peso = '';
     private $tipo = '';
     private $fecha_expiracion = '';
-    public function __construct($nombre, $ruta, $tamaño, $tipo, $fecha_expiracion){
-        $this->nombre = $nombre;
-        $this->ruta = $ruta;
-        $this->tamaño = $tamaño;
-        $this->tipo = $tipo;
-        $this->fecha_expiracion = $fecha_expiracion;
+
+    // public function __construct($nombre, $ruta, $peso, $tipo, $fecha_expiracion){
+    //     $this->nombre = $nombre;
+    //     $this->ruta = $ruta;
+    //     $this->peso = $peso;
+    //     $this->tipo = $tipo;
+    //     $this->fecha_expiracion = $fecha_expiracion;
+    // }
+
+    public function __construct(array $data)
+    {
+        $this->id = $data['id'] ?? '';
+        $this->nombre = $data['nombre'] ?? '';
+        $this->ruta = $data['ruta'] ?? '';
+        $this->peso = $data['peso'] ??'';
+        $this->tipo = $data['tipo'] ?? '';
+        $this->fecha_expiracion = $data['fecha_expiracion'] ??'';
     }
 
     public function Show(){
-        return $this->nombre.' '.$this->ruta.' '.$this->tamaño.' '.$this->tipo.' '.$this->fecha_expiracion;
+        return $this->id.' '.$this->nombre.' '.$this->ruta.' '.$this->peso.' '.$this->tipo.' '.$this->fecha_expiracion;
+    }
+
+    public static function fromModel(ArchivoModel $archivo)
+    {
+        return new self([
+            'nombre' => $archivo->nombre,
+            'ruta' => $archivo->ruta,
+            'peso' => $archivo->peso,
+            'tipo' => $archivo->tipo,
+            'fecha_expiracion' => $archivo->fecha_expiracion,
+        ]);
     }
     public function toArray(){
         return [
             'nombre' => $this->nombre,
             'ruta' => $this->ruta,
-            'tamaño' => $this->tamaño,
+            'peso' => $this->peso,
             'tipo' => $this->tipo,
             'fecha_expiracion' => $this->fecha_expiracion
         ];
@@ -30,30 +56,30 @@ class Archivo{
         return $this->nombre;
     }
     public function setNombres($nombre){
-        $this->nombre=$nombre;
+        $this->nombre = $nombre;
     }
-    public function getruta(){
+    public function getRuta(){
         return $this->ruta;
     }
-    public function setruta($ruta){
-        $this->ruta=$ruta;
+    public function setRuta($ruta){
+        $this->ruta = $ruta;
     }
-    public function gettamaño(){
-        return $this->tamaño;
+    public function getPeso(){
+        return $this->peso;
     }
-    public function settamaño($tamaño){
-        $this->tamaño=$tamaño;
+    public function setPeso($peso){
+        $this->$peso = $peso;
     }
-    public function gettipo(){
+    public function getTipo(){
         return $this->tipo;
     }
-    public function settipo($tipo){
-        $this->tipo=$tipo;
+    public function setTipo($tipo){
+        $this->tipo = $tipo;
     }
-    public function getfecha_expiracion(){
+    public function getFecha_expiracion(){
         return $this->fecha_expiracion;
     }
-    public function setfecha_expiracion($fecha_expiracion){
-        $this->fecha_expiracion=$fecha_expiracion;
+    public function setFecha_expiracion($fecha_expiracion){
+        $this->fecha_expiracion = $fecha_expiracion;
     }
 }
