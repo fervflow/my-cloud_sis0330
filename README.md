@@ -64,6 +64,15 @@ Dirigete a la carpeta donde quieres clonar el proyecto y clónalo ejecutando el 
     ```
 
 ### 2. Construir los contenedores
+Puedes simplemente abrir el proyecto con VS Code y toda la configuración inicial se realizará de manera automática.
+```sh
+code . &
+```
+
+Esto abrira el proyecto en VS Code e iniciará dos tareas en terminales, una con el nombre 'Docker Server' que configura y levanta los contenedores, otro con el nombre 'Laravel Shell' para ejecutar los comandos de `composer` y `artisan`.
+
+**O**, se puede realizar la configuración manual:
+
 1. Una vez clonado el proyecto, dirígete a la carpeta clonada con:
     ```sh
     cd my-cloud_sis0330

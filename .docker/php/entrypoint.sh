@@ -43,6 +43,12 @@ if [ ! -f "/var/www/.docker/.setup_done" ]; then
     touch ./.docker/.setup_done && echo "===>>> CONFIGURACIÓN INICIAL COMPLETADA."
 else
     echo "===>>> CONFIGURACIÓN INICIAL OMITIDA."
+
+    # Install composer dependencies
+    echo "Instalando dependencias de Composer..."
+    composer install || exit 1
+
+    echo "===>>> CONFIGURACIÓN COMPLETADA."
 fi
 
 # Run the original PHP-FPM command
