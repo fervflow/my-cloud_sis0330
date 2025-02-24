@@ -15,3 +15,9 @@ Route::prefix('usuarios')->group(function () {
 Route::get('/home', function () {
     return view('Home.index');
 });
+Route::get('/admin', function () {
+    return view('Admin.index');
+});
+Route::get('/adminuser', function () {
+    return view('AdminUser.index');
+});
