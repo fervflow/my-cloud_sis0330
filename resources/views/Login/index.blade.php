@@ -22,6 +22,7 @@
       <h2 class="text-3xl font-semibold text-center text-gray-800 mb-6">Iniciar sesión</h2>
 
       <form action="/login" method="POST">
+        @csrf
         <!-- Campo de correo electrónico -->
         <div class="mb-4">
           <label for="correo" class="block text-gray-700">Correo electrónico</label>
