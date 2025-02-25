@@ -59,9 +59,11 @@
     <h2 class="text-lg font-bold mt-3">¡Hola, {{ $usuario->nombres }}!</h2>
 
     <div class="mt-4 w-full">
-        <button class="w-full py-2 text-purple-600 font-semibold hover:bg-gray-200 rounded-md">
+
+        <a href="{{ route('home.perfil') }}" class="w-full py-2 text-purple-600 font-semibold hover:bg-gray-200 rounded-md">
             Editar perfil
-        </button>
+        </a>
+
         <form action="{{ route('logout') }}" method="POST" class="mt-2">
             @csrf
             <button type="submit" class="w-full py-2 bg-red-600 text-white font-semibold rounded-md hover:bg-red-700">

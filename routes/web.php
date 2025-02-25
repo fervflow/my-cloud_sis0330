@@ -35,5 +35,7 @@ Route::middleware('guest')->group(function () {
     Route::post('/register', [LoginController::class, 'register']);
 });
 
+Route::get('/perfil', [HomeController::class, 'perfil'])->name('home.perfil')->middleware('auth');
+Route::put('/perfil', [HomeController::class, 'updatePerfil'])->name('home.updatePerfil')->middleware('auth');
 
 Route::post('/logout', function () {Auth::logout();return redirect('/login');})->name('logout');

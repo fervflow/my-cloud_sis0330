@@ -36,7 +36,7 @@ class UsuarioService
             'apellidos' => $data['apellidos'],
             'correo' => $data['correo'],
             'rol' => $data['rol'],
-            'espacio_total' => $data['espacio_total']
+            'espacio_total' => $data['espacio_total'],
         ]);
 
         $usuarioModel->update($data);
