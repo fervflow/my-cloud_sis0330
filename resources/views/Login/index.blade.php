@@ -13,8 +13,8 @@
 
   <div class="max-w-4xl w-full bg-white shadow-lg rounded-lg flex overflow-hidden">
     <!-- Sección de la imagen (logo) -->
-    <div class="w-1/2 bg-blue-500 flex items-center justify-center p-8">
-        <img src="{{ asset('Img/logo.png') }}" class="h-40 mx-auto" alt="Mi Cloud Logo">
+    <div class="w-1/2 bg-purple-600 flex items-center justify-center p-8">
+        <img src="{{ asset('Img/Logo1.png') }}" class="h-40 mx-auto" alt="Mi Cloud Logo">
     </div>
 
     <!-- Sección del formulario de login -->
@@ -40,7 +40,7 @@
         <!-- Botones de Ingresar y Registrarse -->
         <div class="flex justify-between items-center">
           <button type="submit"
-            class="w-full bg-blue-500 text-white p-3 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            class="w-full bg-purple-600 text-white p-3 rounded-md hover:bg-purple-900 focus:outline-none focus:ring-2 focus:ring-blue-500">
             Ingresar
           </button>
         </div>
