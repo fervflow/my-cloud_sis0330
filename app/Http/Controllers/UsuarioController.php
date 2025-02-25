@@ -78,5 +78,18 @@ class UsuarioController extends Controller
             return redirect()->back()->with('error', 'Error al actualizar el usuario.');
         }
     }
+    //////////////añadido
+    public function findByName(Request $request)
+    {
+        $nombre = $request->input('nombre');
+        $usuarios = $this->usuarioService->findUserByName($nombre);
+
+        if (!$usuarios) {
+            return response()->json(['message' => 'No se encontraron usuarios'], 404);
+        }
+
+        return response()->json($usuarios);
+    }
+    /////////////
 }
 

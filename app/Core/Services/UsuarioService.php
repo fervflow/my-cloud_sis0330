@@ -62,6 +62,20 @@ class UsuarioService
             return null;
         }
     }
+    ///////////////// añadido
+    public function findUserByName(string $nombre)
+    {
+        $usuarios = UsuarioModel::where('nombres', 'like', "%$nombre%")->get();
+
+        if ($usuarios->isEmpty()) {
+            return null;
+        }
+
+        return $usuarios->map(function ($usuario) {
+            return UsuarioDTO::fromModel($usuario);
+        });
+    }
+    ///////////////
 
     public function changeRole(string $id, string $rol)
     {

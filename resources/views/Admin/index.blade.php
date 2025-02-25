@@ -9,10 +9,15 @@
     <!-- Buscador Usuarios -->
     <div class="flex justify-between items-center mb-4">
         <div class="flex border rounded-lg overflow-hidden w-1/3">
-            <input type="text" placeholder="Buscar Usuarios" class="px-4 py-2 w-full border-none outline-none">
-            <button class="bg-gray-300 px-4 py-2">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.2-5.2m2.7-4.8a7 7 0 1 1-14 0 7 7 0 0 1 14 0z"></path>
+            <input type="text" id="buscarUsuario" placeholder="Buscar Usuarios"
+                   class="px-4 py-2 w-full focus:ring-2 focus:ring-gray-400"
+                   aria-label="Buscar usuarios">
+            <button type="button" class="bg-gray-300 px-4 py-2 hover:bg-gray-400"
+                    title="Buscar usuario">
+                <svg class="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" stroke-width="2"
+                     viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                          d="M21 21l-5.2-5.2m2.7-4.8a7 7 0 1 1-14 0 7 7 0 0 1 14 0z"></path>
                 </svg>
             </button>
         </div>
@@ -132,6 +137,49 @@
             </div>
         </div>
     </head>
+    <script>
+        document.getElementById('buscarUsuario').addEventListener('keyup', function() {
+        let query = this.value.toLowerCase(); // Convertir el término de búsqueda a minúsculas para la comparación
+        if (query.length > 2) { // Evita buscar con menos de 3 caracteres
+            fetch(`/usuarios/buscar?q=${query}`)
+                .then(response => response.json())
+                .then(data => {
+                    let userList = document.querySelector('.list-group');
+                    userList.innerHTML = ''; // Limpiar la lista actual
+
+                    data.forEach(usuario => {
+                        let userItem = `
+                            <div class="list-group-item user-item p-4 border rounded mb-2" data-nombre="${usuario.nombres.toLowerCase()} ${usuario.apellidos.toLowerCase()}">
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <strong>${usuario.nombres} ${usuario.apellidos}</strong> - ${usuario.correo} -
+                                        Rol: <span class="badge bg-${usuario.rol === 'admin' ? 'danger' : 'primary'}">${usuario.rol}</span> -
+                                        Espacio: ${usuario.espacio_total} GB
+                                    </div>
+                                    <button class="btn btn-primary">Editar</button>
+                                </div>
+                            </div>`;
+
+                        // Mostrar el usuario si el nombre coincide con la búsqueda
+                        if (usuario.nombres.toLowerCase().includes(query) || usuario.apellidos.toLowerCase().includes(query)) {
+                            userList.innerHTML += userItem;
+                        }
+                    });
+
+                    // Ocultar usuarios que no coinciden
+                    let userItems = document.querySelectorAll('.user-item');
+                    userItems.forEach(item => {
+                        let nombre = item.getAttribute('data-nombre');
+                        if (!nombre.includes(query)) {
+                            item.style.display = 'none'; // Ocultar usuario que no coincide
+                        } else {
+                            item.style.display = 'block'; // Mostrar usuario que coincide
+                        }
+                    });
+                });
+        }
+    });
+    </script>
 
 </main>
 @endsection
