@@ -38,6 +38,7 @@ class HomeController extends Controller
 
         return view('Home.perfil', compact('usuario'));
     }
+
     public function updatePerfil(Request $request)
     {
         $usuarioModel = Auth::user();
@@ -49,21 +50,23 @@ class HomeController extends Controller
             'nombres' => 'required|string|max:255',
             'apellidos' => 'required|string|max:255',
             'correo' => 'required|email|max:255',
-            'password' => 'nullable|string|min:8|confirmed',
+            'password' => 'nullable|string|min:6|confirmed',
         ]);
-
-        $password = $validated['password'] ? bcrypt($validated['password']) : $usuarioModel->password;
+        Log::info("Usuario validado: {$usuarioModel->__toString()}");
 
         $data = [
             'nombres' => $validated['nombres'],
             'apellidos' => $validated['apellidos'],
             'correo' => $validated['correo'],
             'rol' => $usuarioModel->rol,
-            'password' => $password,
+            'password' => $validated['password'],
             'espacio_total' => $usuarioModel->espacio_total,
         ];
+        Log::info("Usuario pass: {$data['password']}");
 
-        $this->usuarioService->updateUser($usuarioModel->id, $data);
+        $user = $this->usuarioService->updateUser($usuarioModel->id, $data);
+
+        Log::info("Usuario actualizado: {$user->__toString()}");
 
         return redirect()->route('home.index')->with('success', 'Perfil actualizado correctamente');
     }
