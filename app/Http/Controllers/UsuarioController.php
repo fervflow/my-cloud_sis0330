@@ -65,7 +65,7 @@ class UsuarioController extends Controller
             'nombres'             => 'required|string',
             'apellidos'           => 'required|string',
             'correo'              => 'required|email',
-            'espacio_disponible'  => 'required|numeric',
+            'espacio_total'       => 'required|numeric',
             'rol'                 => 'required|string'
         ]);
 

@@ -30,6 +30,15 @@ class UsuarioService
         if (!$usuarioModel) {
             return false;
         }
+
+        $usuarioModel->update([
+            'nombres' => $data['nombres'],
+            'apellidos' => $data['apellidos'],
+            'correo' => $data['correo'],
+            'rol' => $data['rol'],
+            'espacio_total' => $data['espacio_total']
+        ]);
+
         $usuarioModel->update($data);
         return new UsuarioDTO(
             '',
@@ -38,7 +47,8 @@ class UsuarioService
             $usuarioModel->correo,
             '',
             $usuarioModel->rol,
-            $usuarioModel->espacio_disponible
+            $usuarioModel->espacio_disponible,
+            $usuarioModel->espacio_total
         );
     }
 

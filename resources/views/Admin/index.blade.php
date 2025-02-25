@@ -28,7 +28,7 @@
                     <div>
                         <strong>{{ $usuario->nombres }} {{ $usuario->apellidos }}</strong> - {{ $usuario->correo }} -
                         Rol: <span class="badge bg-{{ $usuario->rol == 'admin' ? 'danger' : 'primary' }}">{{ ucfirst($usuario->rol) }}</span> -
-                        Espacio: {{ $usuario->espacio_disponible }} GB
+                        Espacio: {{ $usuario->espacio_total }} GB
                     </div>
                     <!-- Botón para editar -->
                     <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editModal{{ $usuario->id }}">
@@ -62,9 +62,10 @@
                                     <input type="email" class="form-control" id="correo{{ $usuario->id }}" name="correo" value="{{ $usuario->correo }}" required>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="espacio_disponible{{ $usuario->id }}" class="form-label">Espacio Disponible (GB)</label>
-                                    <input type="number" class="form-control" id="espacio_disponible{{ $usuario->id }}" name="espacio_disponible" value="{{ $usuario->espacio_disponible }}" required>
+                                    <label for="espacio_total{{ $usuario->id }}" class="form-label">Espacio Total (GB)</label>
+                                    <input type="number" class="form-control" id="espacio_total{{ $usuario->id }}" name="espacio_total" value="{{ $usuario->espacio_total }}" required>
                                 </div>
+
                                 <div class="mb-3">
                                     <label for="rol{{ $usuario->id }}" class="form-label">Rol</label>
                                     <select class="form-select" id="rol{{ $usuario->id }}" name="rol">

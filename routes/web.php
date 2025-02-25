@@ -36,5 +36,4 @@ Route::middleware('guest')->group(function () {
 });
 
 
-
 Route::post('/logout', function () {Auth::logout();return redirect('/login');})->name('logout');

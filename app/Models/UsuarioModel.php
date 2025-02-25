@@ -26,6 +26,7 @@ class UsuarioModel extends Authenticatable
         'password',
         'rol',
         'espacio_disponible',
+        'espacio_total'
     ];
 
     /**
