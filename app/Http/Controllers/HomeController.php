@@ -52,7 +52,6 @@ class HomeController extends Controller
             'correo' => 'required|email|max:255',
             'password' => 'nullable|string|min:6|confirmed',
         ]);
-        Log::info("Usuario validado: {$usuarioModel->__toString()}");
 
         $data = [
             'nombres' => $validated['nombres'],
@@ -62,12 +61,7 @@ class HomeController extends Controller
             'password' => $validated['password'],
             'espacio_total' => $usuarioModel->espacio_total,
         ];
-        Log::info("Usuario pass: {$data['password']}");
-
         $user = $this->usuarioService->updateUser($usuarioModel->id, $data);
-
-        Log::info("Usuario actualizado: {$user->__toString()}");
-
         return redirect()->route('home.index')->with('success', 'Perfil actualizado correctamente');
     }
 

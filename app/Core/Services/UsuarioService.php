@@ -31,27 +31,8 @@ class UsuarioService
             return false;
         }
 
-        /*$usuarioModel->update([
-            'nombres' => $data['nombres'],
-            'apellidos' => $data['apellidos'],
-            'correo' => $data['correo'],
-            'rol' => $data['rol'],
-            'espacio_total' => $data['espacio_total'],
-            'password'=> $data['password'],
-        ]);*/
-
         $usuarioModel->update($data);
-        return UsuarioDTO::fromModel($usuarioModel)
-            /*
-            '',
-            $usuarioModel->nombres,
-            $usuarioModel->apellidos,
-            $usuarioModel->correo,
-            '',
-            $usuarioModel->rol,
-            $usuarioModel->espacio_disponible,
-            $usuarioModel->espacio_total
-        */;
+        return UsuarioDTO::fromModel($usuarioModel);
     }
 
     public function findUserByEmail(string $email)
