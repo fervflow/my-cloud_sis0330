@@ -24,6 +24,14 @@
             <nav class="flex-1">
                 <ul>
                     <li class="mb-4">
+                        <a href="{{ route('home.index') }}" class="flex items-center text-gray-700 hover:bg-gray-200 rounded-lg px-2 py-1">
+                            <svg class="w-5 h-5 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m4 12 8-8 8 8M6 10.5V19a1 1 0 0 0 1 1h3v-3a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3h3a1 1 0 0 0 1-1v-8.5"/>
+                              </svg>
+                            Página Principal
+                        </a>
+                    </li>
+                    <li class="mb-4">
                         <a href="#" class="flex items-center text-gray-700 hover:bg-gray-200 rounded-lg px-2 py-1">
                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10l1-1m0 0l7-7m-7 7h11m4 0a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V10a2 2 0 012-2h11m0 0l-1 1"></path></svg>
                             Crear carpeta
@@ -62,9 +70,10 @@
                     <li class="mb-4">
                         @if(auth()->user() && auth()->user()->rol === 'admin')
                             <a href="{{ route('admin') }}" class="flex items-center text-gray-700 hover:bg-gray-200 rounded-lg px-2 py-1">
-                                <svg class="w-5 h-5 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                                    <path stroke="currentColor" stroke-width="2" d="M7 17v1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1a3 3 0 0 0-3-3h-4a3 3 0 0 0-3 3Zm8-9a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
-                                </svg>
+                                <svg class="w-5 h-5 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                                    <path fill-rule="evenodd" d="M12 4a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm-2 9a4 4 0 0 0-4 4v1a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-1a4 4 0 0 0-4-4h-4Z" clip-rule="evenodd"/>
+                                  </svg>
+
                                 Usuarios
                             </a>
                         @endif
@@ -85,11 +94,6 @@
                 <button class="mt-3 w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-900 transition duration-300">
                     Obtener más almacenamiento
                 </button>
-
-                <form action="{{ route('logout') }}" method="POST" class="mt-4">
-                    @csrf
-                    <button type="submit" class="btn btn-danger bg-red-700 p-2 rounded text-white hover:bg-red-900">Cerrar sesión</button>
-                </form>
             </div>
 
         </aside>
