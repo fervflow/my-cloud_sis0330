@@ -57,7 +57,9 @@ class LoginController extends Controller
             nombres: $request->validated()['nombres'],
             apellidos: $request->validated()['apellidos'],
             correo: $request->validated()['correo'],
-            password: $request->validated()['password']
+            password: $request->validated()['password'],
+            espacio_disponible: 10.00,
+            espacio_total: 10.00
         );
 
         Log::info("Usuario validado: {$usuarioDto->__toString()}");

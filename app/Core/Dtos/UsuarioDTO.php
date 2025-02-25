@@ -14,6 +14,7 @@ class UsuarioDTO extends Authenticatable
         public readonly string $password = '',
         public string $rol = 'usuario',
         public float $espacio_disponible = 10.00,
+        public float $espacio_total = 10.00
     ) {}
 
     public static function fromModel(UsuarioModel $model): self {
@@ -24,7 +25,8 @@ class UsuarioDTO extends Authenticatable
             correo: $model->correo,
             password: $model->password,
             rol: $model->rol,
-            espacio_disponible: $model->espacio_disponible
+            espacio_disponible: $model->espacio_disponible,
+            espacio_total: $model->espacio_total
         );
     }
 
@@ -38,6 +40,7 @@ class UsuarioDTO extends Authenticatable
             'password' => $this->password,
             'rol' => $this->rol,
             'espacio_disponible' => $this->espacio_disponible,
+            'espacio_total' => $this->espacio_total
         ];
     }
 
@@ -55,6 +58,7 @@ class UsuarioDTO extends Authenticatable
         $usuarioModel->password = $this->password;
         $usuarioModel->rol = $this->rol;
         $usuarioModel->espacio_disponible = $this->espacio_disponible;
+        $usuarioModel->espacio_total = $this->espacio_total;
 
         return $usuarioModel;
     }

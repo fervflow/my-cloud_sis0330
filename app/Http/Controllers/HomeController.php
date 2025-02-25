@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Core\Services\UsuarioService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use App\Core\Dtos\UsuarioDTO;
+use App\Models\UsuarioModel;
 
 class HomeController extends Controller
 {
@@ -14,11 +17,14 @@ class HomeController extends Controller
     { }
     public function index()
     {
-        // Obtener todos los usuarios
-        $usuarios = $this->usuarioService->getUsuarios();
-        Log::alert("controller.....");
+        $usuarioModel = Auth::user();
+        if (!$usuarioModel instanceof UsuarioModel) {
+            abort(403, 'Usuario no autorizado');
+        }
+        $usuario = UsuarioDTO::fromModel($usuarioModel);
+        $usuario->espacio_utilizado = 0;
+        $usuario->espacio_total = $usuario->espacio_total ?: 5;
 
-        // Pasar los usuarios a la vista
-        return view('Home.index', compact('usuarios'));
+        return view('Home.index', compact('usuario'));
     }
 }

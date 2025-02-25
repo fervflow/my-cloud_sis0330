@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\AdminController;
 
 
 Route::get('/', function () {
@@ -18,12 +19,12 @@ Route::prefix('usuarios')->group(function () {
 
 Route::get('/home', [HomeController::class, 'index'])->name('home.index')->middleware('auth');
 
-Route::get('/admin', function () {
-    return view('Admin.index');
-});
 Route::get('/adminuser', function () {
     return view('AdminUser.index');
 });
+
+Route::get('/admin', [AdminController::class,'index'])->name('admin')->middleware('auth');
+Route::put('/usuarios/{id}', [UsuarioController::class, 'update'])->name('usuarios.update');
 
 
 Route::get('/login', [LoginController::class, 'index'])->name('login');
@@ -33,7 +34,6 @@ Route::middleware('guest')->group(function () {
     Route::get('/register', [LoginController::class, 'showRegisterForm']);
     Route::post('/register', [LoginController::class, 'register']);
 });
-
 
 
 Route::post('/logout', function () {Auth::logout();return redirect('/login');})->name('logout');
