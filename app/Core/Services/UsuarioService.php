@@ -1,24 +1,56 @@
 <?php
 namespace App\Core\Services;
-use App\Core\Usuario;
+
+use App\Core\Dtos\UsuarioDTO;
 use App\Models\UsuarioModel;
 
 class UsuarioService
 {
-
-    public function add(Usuario $usuario)
-    {
-        return UsuarioModel::create($usuario->toArray());
-    }
-
     public function getUsuarios()
     {
-        return UsuarioModel::all();
+        $usuarios = UsuarioModel::all();
+
+        return $usuarios->map(function ($usuario) {
+            return UsuarioDTO::fromModel($usuario);
+        });
+    }
+
+    public function createUser(UsuarioDTO $usuarioDTO): UsuarioDTO
+    {
+        $usuarioModel = new UsuarioModel();
+        $usuarioModel->fill($usuarioDTO->toArray());
+        $usuarioModel->save();
+
+        return UsuarioDTO::fromModel($usuarioModel);
+    }
+
+    public function updateUser(int $id, array $data)
+    {
+        $usuarioModel = UsuarioModel::find($id);
+        if (!$usuarioModel) {
+            return false;
+        }
+        $usuarioModel->update($data);
+        return new UsuarioDTO(
+            '',
+            $usuarioModel->nombres,
+            $usuarioModel->apellidos,
+            $usuarioModel->correo,
+            '',
+            $usuarioModel->rol,
+            $usuarioModel->espacio_disponible
+        );
     }
 
     public function findUserByEmail(string $email)
     {
-        return UsuarioModel::where('correo', $email)->first();
+        $usuario = UsuarioModel::where('correo', $email)->first();
+
+        if ($usuario) {
+            return UsuarioDTO::fromModel($usuario);
+        } else {
+            return null;
+        }
     }
 
     public function changeRole(string $id, string $rol)
@@ -35,51 +67,6 @@ class UsuarioService
         return $usuario;
     }
 
-    public function edit()
-    {
-    }
-
-    public function createUser(array $data)
-    {
-        $usuario = new Usuario(
-            '',
-            $data['nombres'],
-            $data['apellidos'],
-            $data['correo'],
-            '',
-            $data['rol'] ?? 'usuario',
-            $data['espacio_disponible'] ?? 1
-        );
-
-        $usuarioModel = UsuarioModel::create([
-            'nombres' => $usuario->getNombres(),
-            'apellidos' => $usuario->getApellidos(),
-            'correo' => $usuario->getCorreo(),
-            'password' => bcrypt($data['password']),
-            'rol' => $usuario->getRol(),
-            'espacio_disponible' => 1,
-            //'espacio_disponible' => $usuario->getEspacioDisponible(),
-        ]);
-
-        return $usuarioModel;
-    }
-    public function updateUser(int $id, array $data)
-    {
-        $usuarioModel = UsuarioModel::find($id);
-        if (!$usuarioModel) {
-            return false;
-        }
-        $usuarioModel->update($data);
-        return new Usuario(
-            '',
-            $usuarioModel->nombres,
-            $usuarioModel->apellidos,
-            $usuarioModel->correo,
-            '',
-            $usuarioModel->rol,
-            $usuarioModel->espacio_disponible
-        );
-    }
     public function deleteUser(int $id)
     {
         $usuarioModel = UsuarioModel::find($id);

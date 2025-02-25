@@ -18,7 +18,8 @@ return [
     |
     */
 
-    'default' => env('LOG_CHANNEL', 'stack'),
+    // 'default' => env('LOG_CHANNEL', 'stack'),
+    'default' => env('LOG_CHANNEL', 'stderr'),
 
     /*
     |--------------------------------------------------------------------------
@@ -99,8 +100,9 @@ return [
             //'driver' => 'monolog',
             'driver' => 'single',
             'path' => 'php://stderr',
-            'level' => 'debug',
-            //'level' => env('LOG_LEVEL', 'debug'),
+            // 'path' => storage_path('logs/laravel.log'),
+            // 'level' => 'debug',
+            'level' => env('LOG_LEVEL', 'debug'),
             //'handler' => StreamHandler::class,
             //'formatter' => env('LOG_STDERR_FORMATTER'),
             //'with' => [

@@ -6,13 +6,13 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Core\ListaUsuario;
-use App\Core\Usuario;
+use App\Core\UsuarioDTO;
 use App\Models\UsuarioModel;
 
 class UsuarioTest extends TestCase
 {
     use RefreshDatabase, WithFaker;
-    
+
     /**
      * A basic feature test example.
      */
@@ -25,7 +25,7 @@ class UsuarioTest extends TestCase
     public function test_add_usuario(): void
     {
         $listaUsuario = new ListaUsuario();
-        $newUsuario = new Usuario(
+        $newUsuario = new UsuarioDTO(
             id: '1',
             nombres: 'Juan',
             apellidos: 'Perez',
@@ -41,14 +41,14 @@ class UsuarioTest extends TestCase
     public function test_not_add_usuario_data_null(): void
     {
         $listaUsuario = new ListaUsuario();
-        $newUsuario = new Usuario(null, null, null, null, null, null, null);
+        $newUsuario = new UsuarioDTO(null, null, null, null, null, null, null);
         $usuarioExpect = $listaUsuario->add($newUsuario);
         $this->assertEquals($usuarioExpect, null);
     }
     public function test_not_add_usuario_data_cant_null(): void
     {
         $listaUsuario = new ListaUsuario();
-        $newUsuario = new Usuario(null, 'Juan', null, null, null, null, null);
+        $newUsuario = new UsuarioDTO(null, 'Juan', null, null, null, null, null);
         $usuarioExpect = $listaUsuario->add($newUsuario);
 
         $this->assertEquals($usuarioExpect, null);
@@ -63,7 +63,7 @@ class UsuarioTest extends TestCase
 
     public function test_EncontrarUsuarioPorEmail(): void
     {
-        $usuarioNuevo = new Usuario(
+        $usuarioNuevo = new UsuarioDTO(
             id: '1',
             nombres: 'Juan',
             apellidos: 'Perez',
@@ -86,7 +86,7 @@ class UsuarioTest extends TestCase
 
     public function test_CambiarRolYRetornarUsuarioActualizado(): void
     {
-        $usuarioInsert =new Usuario(
+        $usuarioInsert =new UsuarioDTO(
             id: '4',
             nombres: 'Juan',
             apellidos: 'Perez',

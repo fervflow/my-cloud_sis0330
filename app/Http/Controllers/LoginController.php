@@ -1,79 +1,78 @@
 <?php
-    namespace App\Http\Controllers;
+namespace App\Http\Controllers;
 
-    use Illuminate\Http\Request;
-    use App\Core\ListaUsuario;
-    use Illuminate\Support\Facades\Auth;
-    use Illuminate\Support\Facades\Hash;
-    use App\Core\Usuario;
-    use App\Models\UsuarioModel;
+use App\Core\Dtos\UsuarioDTO;
+use Illuminate\Http\Request;
+use App\Core\Services\UsuarioService;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\RegisterUsuarioRequest;
 use Illuminate\Support\Facades\Log;
 
-    class LoginController extends Controller
+class LoginController extends Controller
+{
+    public function __construct(
+        private UsuarioService $usuarioService,
+    )
+    { }
+
+    public function index()
     {
-        protected $listaUsuario;
-
-        public function __construct()
-        {
-            $this->listaUsuario = new ListaUsuario();
-        }
-
-        public function index()
-        {
-            return view('Login.index');
-        }
-
-        public function login(Request $request)
-        {
-            Log::info('LOGIN CONTROLLER');
-            Log::info($request->input('correo'));
-            Log::info($request->input('password'));
-            $request->validate([
-                'correo' => 'required|email',
-                'password' => 'required'
-            ]);
-            $usuario = UsuarioModel::where('correo', $request->input('correo'))->first();
-            if ($usuario && Hash::check($request->input('password'), $usuario->password)) {
-                Auth::login($usuario);
-                Log::info('LOGIN Correcto');
-                return redirect()->intended('/home');
-            }
-            return back()->withErrors(['correo' => 'Credenciales incorrectas']);
-        }
-
-
-        public function showRegisterForm()
-        {
-            return view('login.register');
-        }
-
-        public function register(Request $request)
-        {
-            $request->validate([
-                'nombres' => 'required|string|max:255',
-                'apellidos' => 'required|string|max:255',
-                'correo' => 'required|email|unique:usuarios,correo',
-                'password' => 'required|min:6|confirmed'
-            ]);
-
-            $usuario = new Usuario(
-                '',
-                $request->input('nombres'),
-                $request->input('apellidos'),
-                $request->input('correo'),
-                '',
-                '',
-                ''
-
-            );
-
-            $nuevoUsuario = $this->listaUsuario->add($usuario, $request->input('password'));
-
-            if ($nuevoUsuario) {
-                return redirect('/login')->with('success', 'Usuario registrado correctamente. Ahora puedes iniciar sesión.');
-            } else {
-                return back()->withErrors(['error' => 'No se pudo registrar el usuario.']);
-            }
-        }
-
+        return view('Login.index');
     }
+
+    public function login(Request $request)
+    {
+        Log::info('LOGIN CONTROLLER');
+        Log::info($request->input('correo'));
+        Log::info($request->input('password'));
+
+        $request->validate([
+            'correo' => 'required|email',
+            'password' => 'required'
+        ]);
+
+        $usuarioDto = $this->usuarioService->findUserByEmail($request->input('correo'));
+
+        if ($usuarioDto && Hash::check($request->input('password'), $usuarioDto->password)) {
+            Auth::login($usuarioDto->toModel());
+            Log::info('LOGIN Correcto');
+            return redirect()->intended('/home');
+        }
+
+        return back()->withErrors(['correo' => 'Credenciales incorrectas']);
+    }
+
+
+    public function showRegisterForm()
+    {
+        return view('Login.register');
+    }
+
+    public function register(RegisterUsuarioRequest $request)
+    {
+        Log::info('LOGIN CONTROLLER - REGISTER');
+
+        $usuarioDto = new UsuarioDTO(
+            nombres: $request->validated()['nombres'],
+            apellidos: $request->validated()['apellidos'],
+            correo: $request->validated()['correo'],
+            password: $request->validated()['password']
+        );
+
+        Log::info("Usuario validado: {$usuarioDto->__toString()}");
+
+        // $nuevoUsuario = $this->listaUsuario->add($usuarioDto, $request->input('password'));
+        $nuevoUsuario = $this->usuarioService->createUser($usuarioDto);
+
+        Log::info("Usuario registrado: {$nuevoUsuario->__tostring()}");
+
+        if ($nuevoUsuario) {
+            return redirect('/login')->with('success', 'Usuario registrado correctamente. Ahora puedes iniciar sesión.');
+        } else {
+            Log::error('LOGIN CONTROLLER - REGISTER: ERROR no nuevoUsuario');
+            return back()->withErrors(['error' => 'No se pudo registrar el usuario.']);
+        }
+    }
+
+}

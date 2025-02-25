@@ -6,7 +6,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Core\ListaUsuario;
-use App\Core\Usuario;
+use App\Core\UsuarioDTO;
 use App\Models\UsuarioModel;
 
 class UsuarioControllerTest extends TestCase
@@ -33,7 +33,7 @@ class UsuarioControllerTest extends TestCase
     }
     public function test_create_usuario():void{
         $listaUsuario = new ListaUsuario();
-        $usuario = new Usuario(
+        $usuario = new UsuarioDTO(
             id: '1',
             nombres: 'Juan',
             apellidos: 'Perez',
