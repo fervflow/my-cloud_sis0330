@@ -18,7 +18,7 @@
             </div>
 
             <div class="text-center mb-5">
-                <p class="text-gray-800 font-semibold">Usuario: {{ $usuario->nombres }} {{ $usuario->apellidos }}</p>
+                <p class="text-gray-800 font-semibold">Usuario: {{ auth()->user()->nombres }} {{ auth()->user()->apellidos }}</p>
             </div>
 
             <nav class="flex-1">
@@ -41,12 +41,6 @@
                         <a href="#" class="flex items-center text-gray-700 hover:bg-gray-200 rounded-lg px-2 py-1">
                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path></svg>
                             Subir archivo
-                        </a>
-                    </li>
-                    <li class="mb-4">
-                        <a href="#" class="flex items-center text-gray-700 hover:bg-gray-200 rounded-lg px-2 py-1">
-                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7h18M3 12h18m-9 5h9"></path></svg>
-                            Subir carpeta
                         </a>
                     </li>
                     <br>
@@ -100,6 +94,7 @@
 
         <!-- Main Content -->
         @yield('content')
+
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

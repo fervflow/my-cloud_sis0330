@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Core\Services\UsuarioService;
+use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -14,11 +15,15 @@ class AdminController extends Controller
         private UsuarioService $usuarioService,
     )
     { }
-    public function index()
+    public function index(Request $request)
     {
-        // Obtener todos los usuarios
-        $usuarios = $this->usuarioService->getUsuarios();
-        // Pasar los usuarios a la vista
-        return view('Admin.index', compact('usuarios'));
+        $searchTerm = $request->input('search');
+        if ($searchTerm) {
+            $usuarios = $this->usuarioService->searchUsuarios($searchTerm);
+        } else {
+            $usuarios = $this->usuarioService->getUsuarios();
+        }
+        $usuario = Auth::user();
+        return view('Admin.index', compact('usuarios', 'usuario'));
     }
 }
