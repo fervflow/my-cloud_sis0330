@@ -78,7 +78,14 @@
                             </a>
                         @endif
                     </li>
-
+                    <li>
+                        <a href="/home/crearplanes" class="flex items-center text-gray-700 hover:bg-gray-200 rounded-lg px-2 py-1">
+                            <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 7.757v8.486M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                              </svg>
+                            Crear planes
+                        </a>
+                    </li>
                 </ul>
             </nav>
             <div class="mt-auto text-sm">
@@ -90,10 +97,10 @@
                     {{ number_format($usuario->espacio_utilizado, 2) }} GB utilizados de
                     {{ number_format($usuario->espacio_total, 2) }} GB
                 </p>
-
-                <button class="mt-3 w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-900 transition duration-300">
+                <br>
+                <a href="/home/planes" class="mt-3 w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-900 transition duration-300">
                     Obtener más almacenamiento
-                </button>
+                </a>
             </div>
 
         </aside>

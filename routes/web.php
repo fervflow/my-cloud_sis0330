@@ -6,6 +6,7 @@ use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\PlanesController;
 
 
 Route::get('/', function () {
@@ -19,12 +20,16 @@ Route::prefix('usuarios')->group(function () {
 
 Route::get('/home', [HomeController::class, 'index'])->name('home.index')->middleware('auth');
 
+Route::get('/home/planes', [PlanesController::class, 'index'])->name('home.index')->middleware('auth');
+
+
 Route::get('/adminuser', function () {
     return view('AdminUser.index');
 });
 
 Route::get('/admin', [AdminController::class,'index'])->name('admin')->middleware('auth');
 Route::put('/usuarios/{id}', [UsuarioController::class, 'update'])->name('usuarios.update');
+
 
 
 Route::get('/login', [LoginController::class, 'index'])->name('login');
