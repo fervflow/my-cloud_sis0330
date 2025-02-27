@@ -14,9 +14,11 @@
         </div>
         <div class="flex items-center gap-3">
             <button>
-                <svg class="w-6 h-6 text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.529 9.988a2.502 2.502 0 1 1 5 .191A2.441 2.441 0 0 1 12 12.582V14m-.01 3.008H12M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
-                </svg>
+                <a href="{{ route('home.terminosCondiciones') }}" target="_blank">
+                    <svg class="w-6 h-6 text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.529 9.988a2.502 2.502 0 1 1 5 .191A2.441 2.441 0 0 1 12 12.582V14m-.01 3.008H12M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                    </svg>
+                </a>
             </button>
 
             <!-- Botón para abrir el modal -->
@@ -50,7 +52,7 @@
 </main>
 
 <div id="userModal" class="absolute top-14 right-4 bg-white p-6 rounded-lg shadow-lg w-80 text-center  flex-col items-center hidden">
-    <button type="button" id="closeModal"  class="btn-close "></button>
+    <button type="button" id="closeModal"  class="btn-close absolute bottom-0 right-2 top-2"></button>
     <h3 class="text-gray-500 text-sm mb-3">{{ $usuario->correo }}</h3>
     <div class="bg-purple-600 text-white w-20 h-20 flex items-center justify-center rounded-full text-4xl font-bold mt-2">
         {{ strtoupper(substr($usuario->nombres, 0, 1)) }}
@@ -59,14 +61,13 @@
     <h2 class="text-lg font-bold mt-3">¡Hola, {{ $usuario->nombres }}!</h2>
 
     <div class="mt-4 w-full">
-
         <a href="{{ route('home.perfil') }}" class="w-full py-2 text-purple-600 font-semibold hover:bg-gray-200 rounded-md">
             Editar perfil
         </a>
 
         <form action="{{ route('logout') }}" method="POST" class="mt-2">
             @csrf
-            <button type="submit" class="w-full py-2 bg-red-600 text-white font-semibold rounded-md hover:bg-red-700">
+            <button type="submit" class="w-full py-2 bg-red-600 text-white font-semibold mt-2 rounded-md hover:bg-red-700">
                 Cerrar sesión
             </button>
         </form>

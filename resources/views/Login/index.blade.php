@@ -46,8 +46,8 @@
         </div>
 
       </form>
-      <div class="footer">
-        <p>¿No tienes cuenta? <a href="/register">Regístrate aquí</a></p>
+      <div class="footer mt-3">
+        <p>¿No tienes cuenta? <a href="/register" class="text-blue-500 hover:text-blue-700 font-semibold">Regístrate aquí</a></p>
     </div>
     </div>
   </div>

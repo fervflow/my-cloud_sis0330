@@ -15,6 +15,19 @@ class UsuarioService
         });
     }
 
+    public function searchUsuarios(string $searchTerm)
+    {
+        $searchTerm = strtolower($searchTerm);
+        $usuarios = UsuarioModel::whereRaw('LOWER(nombres) LIKE ?', ["%$searchTerm%"])
+            ->orWhereRaw('LOWER(apellidos) LIKE ?', ["%$searchTerm%"])
+            ->orWhereRaw('LOWER(correo) LIKE ?', ["%$searchTerm%"])
+            ->get();
+
+        return $usuarios->map(function ($usuario) {
+            return UsuarioDTO::fromModel($usuario);
+        });
+    }
+
     public function createUser(UsuarioDTO $usuarioDTO): UsuarioDTO
     {
         $usuarioModel = new UsuarioModel();

@@ -39,3 +39,8 @@ Route::get('/perfil', [HomeController::class, 'perfil'])->name('home.perfil')->m
 Route::put('/perfil', [HomeController::class, 'updatePerfil'])->name('home.updatePerfil')->middleware('auth');
 
 Route::post('/logout', function () {Auth::logout();return redirect('/login');})->name('logout');
+
+
+Route::get('/terminos-condiciones', function () {
+    return view('Home.terminosCondiciones');
+})->name('home.terminosCondiciones');
