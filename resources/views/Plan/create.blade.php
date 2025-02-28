@@ -1,6 +1,7 @@
 @extends('layouts.designerHome')
 
 @section('content')
+
 <div class="container mx-auto mt-6">
     <h1 class="text-2xl font-semibold text-gray-800 mb-4">Crear Plan</h1>
 
