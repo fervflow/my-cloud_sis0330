@@ -3,10 +3,9 @@
 @section('content')
 <main class="flex-1 p-6">
     <h1 class="text-2xl font-bold text-gray-500 mb-4">Editar Perfil</h1>
-    <form action="{{ route('home.updatePerfil') }}" method="POST">
+    <form action="#" method="POST">
         @csrf
         @method('PUT')
-
         <div class="mb-4">
             <label for="nombres" class="block text-sm font-semibold text-gray-600">Nombres</label>
             <input type="text" id="nombres" name="nombres" value="{{ $usuario->nombres }}" class="w-full p-2 border rounded-md mt-1" required>

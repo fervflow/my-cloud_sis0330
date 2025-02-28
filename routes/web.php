@@ -23,21 +23,23 @@ Route::get('/adminuser', function () {
     return view('AdminUser.index');
 });
 
-Route::get('/admin', [AdminController::class,'index'])->name('admin')->middleware('auth');
-Route::get('/plan', [PlanController::class, 'index'])->name('plan.index')->middleware('auth');
-Route::put('/usuarios/{id}', [UsuarioController::class, 'update'])->name('usuarios.update');
+Route::middleware([App\Http\Middleware\AdminRoleMiddleware::class])->group(function (){
+    Route::get('/admin', [AdminController::class, 'index'])->name('admin');
+    Route::get('/plan/create', [PlanController::class, 'create'])->name('plan.create');
+    Route::post('/plan/store', [PlanController::class, 'store'])->name('plan.store');
+    Route::put('/usuarios/{id}', [UsuarioController::class, 'update'])->name('usuarios.update');
+});
 
 
 Route::get('/login', [LoginController::class, 'index'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
 
+
+
 Route::middleware('guest')->group(function () {
     Route::get('/register', [LoginController::class, 'showRegisterForm']);
     Route::post('/register', [LoginController::class, 'register']);
 });
-
-Route::get('/perfil', [HomeController::class, 'perfil'])->name('home.perfil')->middleware('auth');
-Route::put('/perfil', [HomeController::class, 'updatePerfil'])->name('home.updatePerfil')->middleware('auth');
 
 Route::post('/logout', function () {Auth::logout();return redirect('/login');})->name('logout');
 
@@ -46,5 +48,5 @@ Route::get('/terminos-condiciones', function () {
     return view('Home.terminosCondiciones');
 })->name('home.terminosCondiciones');
 
-Route::get('/plan/create', [PlanController::class, 'create'])->name('plan.create')->middleware('auth');
-Route::post('/plan/store', [PlanController::class, 'store'])->name('plan.store')->middleware('auth');
+Route::get('/plan', [PlanController::class, 'index'])->name('plan.index')->middleware('auth');
+

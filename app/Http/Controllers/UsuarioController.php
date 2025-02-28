@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 // use App\Services\UsuarioService;
+use Illuminate\Support\Facades\Auth;
+
 use Illuminate\Http\Request;
 use App\Core\Services\UsuarioService;
 use Illuminate\Http\JsonResponse;
@@ -18,7 +20,6 @@ class UsuarioController extends Controller
 
     public function index(): JsonResponse
     {
-        // Obtiene todos los usuarios y los transforma a DTO
         return response()->json($this->usuarioService->getUsuarios());
     }
 
@@ -60,7 +61,6 @@ class UsuarioController extends Controller
 
     public function update(Request $request, $id)
     {
-        // Validar los datos recibidos
         $data = $request->validate([
             'nombres'             => 'required|string',
             'apellidos'           => 'required|string',
@@ -68,8 +68,6 @@ class UsuarioController extends Controller
             'espacio_total'       => 'required|numeric',
             'rol'                 => 'required|string'
         ]);
-
-        // Llamar al método updateUser del servicio
         $usuarioActualizado = $this->usuarioService->updateUser((int)$id, $data);
 
         if ($usuarioActualizado) {
