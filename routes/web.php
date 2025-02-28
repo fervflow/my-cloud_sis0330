@@ -51,3 +51,4 @@ Route::get('/terminos-condiciones', function () {
 Route::get('/plan', [PlanController::class, 'index'])->name('plan.index')->middleware('auth');
 Route::get('/plan/adquirir/{planId}', [PlanController::class, 'adquirir'])->name('plan.adquirir')->middleware('auth');
 
+Route::get('/inicio', function () {return view('Home.dashboard');});

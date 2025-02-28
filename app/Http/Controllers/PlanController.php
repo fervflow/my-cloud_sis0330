@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Core\Services\PlanService;
+use App\Core\Services\UsuarioService;
 use App\Core\Services\PlanUsuarioService;
 use App\Core\Dtos\PlanDTO;
 use App\Core\Dtos\PlanUsuarioDTO;
@@ -17,10 +18,13 @@ class PlanController extends Controller
 {
     //
     protected $planService;
-
-    public function __construct(PlanService $planService)
+    protected $planUsuarioService;
+    protected $usuarioService;
+    public function __construct(PlanService $planService, PlanUsuarioService $planUsuarioService, UsuarioService $usuarioService)
     {
         $this->planService = $planService;
+        $this->planUsuarioService = $planUsuarioService;
+        $this->usuarioService = $usuarioService;
     }
     public function index()
     {
@@ -29,17 +33,14 @@ class PlanController extends Controller
 
         return view('Plan.index', compact('usuario', 'planes'));
     }
-    // Mostrar formulario para crear un nuevo plan
     public function create()
     {
         $usuario = Auth::user();
         return view('Plan.create', compact('usuario'));
     }
 
-    // Guardar un nuevo plan
     public function store(Request $request)
     {
-        // Validación de datos
         $request->validate([
             'nombre' => 'required|string|max:255',
             'precio' => 'required|numeric',
@@ -47,8 +48,6 @@ class PlanController extends Controller
             'periodo_meses' => 'required|integer',
             'esta_activo' => 'required|boolean',
         ]);
-
-        // Crear el DTO y guardar el plan
         $planDTO = new PlanDTO(
             id: '',
             nombre: $request->input('nombre'),
@@ -59,46 +58,34 @@ class PlanController extends Controller
         );
 
         $planModel = $planDTO->toModel();
-
-        // Guardar en la base de datos
         $planModel->save();
-
-        // Redirigir o mostrar un mensaje de éxito
         return redirect()->route('plan.index')->with('success', 'Plan creado exitosamente.');
     }
 
     public function adquirir($planId)
     {
-        // Obtener el usuario logueado
         $usuario = Auth::user();
-
-        // Verificar si el usuario ya tiene un plan
         $planUsuario = PlanUsuarioModel::where('id_usuario', $usuario->id)->first();
 
         if ($planUsuario) {
-            // El usuario ya tiene un plan, puedes redirigir con un mensaje de error o actualizar el plan
             return redirect()->route('plan.index')->with('error', 'Ya tienes un plan adquirido.');
         }
 
-        // Obtener el plan seleccionado
         $plan = PlanModel::findOrFail($planId);
-
-        // Registrar la relación entre el usuario y el plan en la tabla 'plan_usuario'
-        $fechaPago = now()->toDateString(); // Fecha actual como fecha de pago
-        $fechaRenovacion = now()->addMonths($plan->periodo_meses)->toDateString(); // Fecha de renovación
-
+        $fechaPago = now()->toDateString();
+        $fechaRenovacion = now()->addMonths($plan->periodo_meses)->toDateString();
         $planUsuarioDTO = new PlanUsuarioDTO(
             id: '',
             id_usuario: $usuario->id,
             id_plan: $plan->id,
             fecha_pago: $fechaPago,
             fecha_renovacion: $fechaRenovacion,
-            esta_pagado: false // Puede ser cambiado después, si es necesario
+            esta_pagado: false
         );
-
-        $this->PlanUsuarioService->asignarOActualizarPlan($planUsuarioDTO);
-
+        $this->planUsuarioService->asignarOActualizarPlan($planUsuarioDTO);
+        $this->usuarioService->updateEspacioTotal($usuario->id, $plan->almacenamiento);
         return redirect()->route('plan.index')->with('success', 'Plan adquirido exitosamente.');
     }
+
 
 }

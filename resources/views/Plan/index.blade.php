@@ -51,22 +51,15 @@
 
 <script>
     let selectedPlanId = null;
-
-    // Abre el modal y guarda el ID del plan seleccionado
     function openModal(planId) {
         selectedPlanId = planId;
         document.getElementById("confirmModal").classList.remove("hidden");
     }
-
-    // Cierra el modal
     function closeModal() {
         document.getElementById("confirmModal").classList.add("hidden");
     }
-
-    // Confirmar la adquisición del plan
     document.getElementById("confirmBtn").addEventListener("click", function() {
         if (selectedPlanId) {
-            // Enviar la solicitud AJAX para registrar el plan
             window.location.href = `/plan/adquirir/${selectedPlanId}`;
         }
     });
