@@ -82,4 +82,20 @@ class UsuarioService
         return $usuarioModel->delete();
     }
 
+    public function updateEspacioTotal(int $usuarioId, int $almacenamiento)
+    {
+        $usuario = UsuarioModel::find($usuarioId);
+
+        if (!$usuario) {
+            return false;
+        }
+
+        $usuario->espacio_total = $almacenamiento;
+        $usuario->save();
+
+        return true;
+    }
+
+
+
 }

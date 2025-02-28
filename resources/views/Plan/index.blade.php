@@ -23,10 +23,12 @@
                         <li>✔ Expertos de Google</li>
                         <li>✔ Beneficios adicionales para miembros</li>
                     </ul>
-                    <button class="mt-4 w-full py-2 rounded-lg
+                    <button
+                        class="mt-4 w-full py-2 rounded-lg
                         @if($plan->almacenamiento == 50) bg-green-500 hover:bg-green-600 text-white @endif
                         @if($plan->almacenamiento == 200) bg-blue-500 hover:bg-blue-600 text-white @endif
-                        @if($plan->almacenamiento == 1000) bg-purple-500 hover:bg-purple-600 text-white @endif">
+                        @if($plan->almacenamiento == 1000) bg-purple-500 hover:bg-purple-600 text-white @endif"
+                        onclick="openModal({{ $plan->id }})">
                         Adquirir Plan
                     </button>
                 </div>
@@ -34,5 +36,33 @@
         </div>
     </div>
 </body>
+
+<!-- Modal -->
+<div id="confirmModal" class="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center hidden">
+    <div class="bg-white p-8 rounded-lg shadow-md w-1/3">
+        <h3 class="text-xl font-semibold text-gray-800 mb-4">Confirmar Adquisición</h3>
+        <p class="text-gray-600 mb-4">¿Estás seguro de que deseas adquirir este plan?</p>
+        <div class="flex justify-between">
+            <button onclick="closeModal()" class="py-2 px-4 bg-gray-500 text-white rounded">Cancelar</button>
+            <button id="confirmBtn" class="py-2 px-4 bg-blue-500 text-white rounded">Confirmar</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    let selectedPlanId = null;
+    function openModal(planId) {
+        selectedPlanId = planId;
+        document.getElementById("confirmModal").classList.remove("hidden");
+    }
+    function closeModal() {
+        document.getElementById("confirmModal").classList.add("hidden");
+    }
+    document.getElementById("confirmBtn").addEventListener("click", function() {
+        if (selectedPlanId) {
+            window.location.href = `/plan/adquirir/${selectedPlanId}`;
+        }
+    });
+</script>
 
 @endsection
