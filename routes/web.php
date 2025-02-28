@@ -49,4 +49,5 @@ Route::get('/terminos-condiciones', function () {
 })->name('home.terminosCondiciones');
 
 Route::get('/plan', [PlanController::class, 'index'])->name('plan.index')->middleware('auth');
+Route::get('/plan/adquirir/{planId}', [PlanController::class, 'adquirir'])->name('plan.adquirir')->middleware('auth');
 
