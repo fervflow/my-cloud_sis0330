@@ -6,7 +6,7 @@ use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AdminController;
-
+use App\Http\Controllers\PlanController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -24,6 +24,7 @@ Route::get('/adminuser', function () {
 });
 
 Route::get('/admin', [AdminController::class,'index'])->name('admin')->middleware('auth');
+Route::get('/plan', [PlanController::class, 'index'])->name('plan.index')->middleware('auth');
 Route::put('/usuarios/{id}', [UsuarioController::class, 'update'])->name('usuarios.update');
 
 
@@ -44,3 +45,6 @@ Route::post('/logout', function () {Auth::logout();return redirect('/login');})-
 Route::get('/terminos-condiciones', function () {
     return view('Home.terminosCondiciones');
 })->name('home.terminosCondiciones');
+
+Route::get('/plan/create', [PlanController::class, 'create'])->name('plan.create')->middleware('auth');
+Route::post('/plan/store', [PlanController::class, 'store'])->name('plan.store')->middleware('auth');
