@@ -75,10 +75,11 @@
 
                     <li class="mb-4">
                         @if(auth()->user() && auth()->user()->rol === 'admin')
-                            <a href="{{ route('plan') }}" class="flex items-center text-gray-700 hover:bg-gray-200 rounded-lg px-2 py-1">
-                                <svg class="w-5 h-5 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
-                                    <path fill-rule="evenodd" d="M12 4a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm-2 9a4 4 0 0 0-4 4v1a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-1a4 4 0 0 0-4-4h-4Z" clip-rule="evenodd"/>
-                                  </svg>
+                        <a href="{{ route('plan.create') }}" class="flex items-center text-gray-700 hover:bg-gray-200 rounded-lg px-2 py-1">
+                            <svg class="w-5 h-5 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M13.849 4.22c-.684-1.626-3.014-1.626-3.698 0L8.397 8.387l-4.552.361c-1.775.14-2.495 2.331-1.142 3.477l3.468 2.937-1.06 4.392c-.413 1.713 1.472 3.067 2.992 2.149L12 19.35l3.897 2.354c1.52.918 3.405-.436 2.992-2.15l-1.06-4.39 3.468-2.938c1.353-1.146.633-3.336-1.142-3.477l-4.552-.36-1.754-4.17Z"/>
+                              </svg>
+
                                 Crear Plan
                             </a>
                         @endif
@@ -96,15 +97,25 @@
                     {{ number_format($usuario->espacio_total, 2) }} GB
                 </p>
 
-                <button class="mt-3 w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-900 transition duration-300">
-                    Obtener más almacenamiento
-                </button>
+                <a href="{{ route('plan.index') }}">
+                    <button class="mt-3 w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-900 transition duration-300">
+                        Obtener más almacenamiento
+                    </button>
+                </a>
+
             </div>
 
         </aside>
 
         <!-- Main Content -->
-        @yield('content')
+        <div class="flex-1 p-8">
+            <h1 class="text-5xl font-bold text-left mb-6">
+                <span class="text-black">MY</span>
+                <span class="text-purple-600">CLOUD</span>
+            </h1>
+            @yield('content')
+        </div>
+
 
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

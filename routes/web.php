@@ -24,7 +24,7 @@ Route::get('/adminuser', function () {
 });
 
 Route::get('/admin', [AdminController::class,'index'])->name('admin')->middleware('auth');
-Route::get('/plan', [PlanController::class,'index'])->name('plan')->middleware('auth');
+Route::get('/plan', [PlanController::class, 'index'])->name('plan.index')->middleware('auth');
 Route::put('/usuarios/{id}', [UsuarioController::class, 'update'])->name('usuarios.update');
 
 
@@ -46,8 +46,5 @@ Route::get('/terminos-condiciones', function () {
     return view('Home.terminosCondiciones');
 })->name('home.terminosCondiciones');
 
-Route::prefix('plan')->group(function () {
-    Route::get('/', function () { return view('Plan.index'); })->name('plan');
-    Route::get('/create', function () { return view('Plan.createPlan'); })->name('planc');
-    Route::post('/store', [PlanController::class, 'store'])->name('plan.store');
-});
+Route::get('/plan/create', [PlanController::class, 'create'])->name('plan.create')->middleware('auth');
+Route::post('/plan/store', [PlanController::class, 'store'])->name('plan.store')->middleware('auth');
