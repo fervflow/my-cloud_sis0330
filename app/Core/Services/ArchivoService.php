@@ -3,6 +3,7 @@ namespace App\Core\Services;
 
 use App\Core\Dtos\ArchivoDTO;
 use App\Models\ArchivoModel;
+use GuzzleHttp\Psr7\Request;
 
 class ArchivoService {
 

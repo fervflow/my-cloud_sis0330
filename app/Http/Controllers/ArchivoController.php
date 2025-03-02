@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Core\Services\ArchivoService;
 use App\Core\Services\UsuarioService;
 use App\Core\Services\ArchivoUsuarioService;
@@ -13,12 +14,11 @@ use Illuminate\Http\Request;
 
 class ArchivoController extends Controller
 {
-    //
     protected $archivoService;
     protected $usuarioService;
     protected $archivoUsuarioService;
 
-    public function __construct(ArchivoService $archivoService, UsuarioService $usuarioService, ArchivoUsuarioService $archivoUsuarioService) // Inyecta el servicio
+    public function __construct(ArchivoService $archivoService, UsuarioService $usuarioService, ArchivoUsuarioService $archivoUsuarioService)
     {
         $this->usuarioService = $usuarioService;
         $this->archivoService = $archivoService;
@@ -29,7 +29,7 @@ class ArchivoController extends Controller
     {
         $usuario = Auth::user();
         $request->validate([
-            'archivo' => 'required|file|max:5120',
+            'archivo' => 'required|file',
             'fecha_expiracion' => 'nullable|date'
         ]);
         $archivo = $request->file('archivo');
@@ -54,6 +54,4 @@ class ArchivoController extends Controller
         }
         return redirect()->back()->with('success', 'Archivo subido con éxito');
     }
-
-
 }
