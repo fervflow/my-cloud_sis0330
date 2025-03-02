@@ -7,9 +7,10 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\PlanController;
+use App\Http\Controllers\ArchivoController;
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('/inicio');
 });
 
 Route::prefix('usuarios')->group(function () {
@@ -37,11 +38,11 @@ Route::post('/login', [LoginController::class, 'login']);
 
 
 Route::middleware('guest')->group(function () {
-    Route::get('/register', [LoginController::class, 'showRegisterForm']);
+    Route::get('/register', [LoginController::class, 'showRegisterForm'])->name('register');
     Route::post('/register', [LoginController::class, 'register']);
 });
 
-Route::post('/logout', function () {Auth::logout();return redirect('/login');})->name('logout');
+Route::post('/logout', function () {Auth::logout();return redirect('/');})->name('logout');
 
 
 Route::get('/terminos-condiciones', function () {
@@ -51,4 +52,5 @@ Route::get('/terminos-condiciones', function () {
 Route::get('/plan', [PlanController::class, 'index'])->name('plan.index')->middleware('auth');
 Route::get('/plan/adquirir/{planId}', [PlanController::class, 'adquirir'])->name('plan.adquirir')->middleware('auth');
 
-Route::get('/inicio', function () {return view('Home.dashboard');});
+Route::get('/inicio', [HomeController::class, 'inicio']);
+Route::post('/archivo/subir', [ArchivoController::class, 'subirArchivo'])->name('archivo.subir')->middleware('auth');

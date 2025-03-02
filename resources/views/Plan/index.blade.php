@@ -37,7 +37,6 @@
     </div>
 </body>
 
-<!-- Modal -->
 <div id="confirmModal" class="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center hidden">
     <div class="bg-white p-8 rounded-lg shadow-md w-1/3">
         <h3 class="text-xl font-semibold text-gray-800 mb-4">Confirmar Adquisición</h3>

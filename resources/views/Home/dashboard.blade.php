@@ -3,21 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cloud Storage</title>
+    <title>My Cloud</title>
+    <link rel="icon" href="{{ asset('Img/Logo.ico') }}" type="image/x-icon">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body, html {
             margin: 0;
             padding: 0;
         }
+        .plan {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease-in-out;
+        }
+        .plan:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        .plan-header {
+            background-color:  #5c15ea ;
+            color: white;
+            padding: 16px;
+            border-radius: 8px 8px 0 0;
+        }
+        .plan-body {
+            padding: 16px;
+        }
+        .plan-footer {
+            padding: 16px;
+            background-color: #f7fafc;
+            border-radius: 0 0 8px 8px;
+        }
+        .plan-price {
+            color:  #5c15ea ;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        .plan-storage {
+            color: #5c15ea ;
+            font-weight: bold;
+        }
     </style>
 </head>
-<body class="bg-purple-600">
-    <header class="bg-white text-purple-600 p-4 shadow-md fixed w-full z-50 top-0 left-0">
+<body class="bg-[#5c15ea]">
+    <header class="bg-white text-[#5c15ea] p-4 shadow-md fixed w-full z-50 top-0 left-0">
         <div class="max-w-6xl mx-auto flex justify-between items-center">
             <div class="flex items-center space-x-2 ml-0">
-                <img src="{{ asset('Img/logo.png') }}" class="h-12" alt="Mi Cloud Logo">
-                <h1 class="text-2xl font-bold">MyCloud</h1>
+                <h1 class="text-2xl font-bold">
+                    <span class="text-black">My</span>
+                    <span class="text-[#5c15ea]">Cloud</span>
+                </h1>
             </div>
             <nav class="flex-1 ml-auto">
                 <ul class="flex justify-center space-x-6">
@@ -27,17 +63,18 @@
                 </ul>
             </nav>
             <div class="flex space-x-4 ml-auto">
-                <a href="{{ route('login') }}" class="bg-purple-600 text-white px-4 py-2 rounded-lg shadow-md font-semibold hover:bg-purple-700 transition">Iniciar Sesión</a>
-                <a href="#" class="bg-purple-600 text-white px-4 py-2 rounded-lg shadow-md font-semibold hover:bg-purple-700 transition">Registrarse</a>
+                <a href="{{ route('login') }}" class="bg-black text-white px-4 py-2 rounded-lg shadow-md font-semibold hover:bg-gray-600 transition">Iniciar Sesión</a>
+                <a href="{{ route('register') }}" class="bg-[#5c15ea] text-white px-4 py-2 rounded-lg shadow-md font-semibold hover:bg-[#4a0db8] transition">Registrarse</a>
             </div>
         </div>
     </header>
 
-    <section class="text-center py-24 bg-white text-purple-600 mt-16">
-        <h2 class="text-4xl font-bold mb-4">Almacenamiento en la nube seguro y rápido</h2>
-        <p class="text-lg">Guarda, accede y comparte tus archivos desde cualquier lugar.</p>
-        <a href="#plans" class="mt-6 inline-block bg-purple-600 text-white px-6 py-3 rounded-lg shadow-lg font-semibold hover:bg-purple-700 transition">Ver Planes</a>
+    <section class="text-center py-24 bg-white text-[#5c15ea] mt-16">
+        <img src="{{ asset('Img/logo.png') }}" class="h-32 mx-auto" alt="Mi Cloud Logo">
+        <h2 class="text-black text-4xl font-bold mb-4">Almacenamiento en la nube seguro y rápido</h2>
+        <p class="text-black text-lg">Guarda, accede y comparte tus archivos desde cualquier lugar.</p>
     </section>
+
 
     <section id="features" class="max-w-6xl mx-auto py-16 px-6 grid md:grid-cols-3 gap-6">
         <div class="bg-white p-6 rounded-lg shadow-md text-center">
@@ -58,31 +95,30 @@
         <div class="max-w-6xl mx-auto text-center">
             <h2 class="text-3xl font-bold mb-6">Nuestros Planes</h2>
             <div class="grid md:grid-cols-3 gap-6">
-                <div class="bg-white p-6 rounded-lg shadow-md">
-                    <h3 class="text-xl font-semibold">Gratis</h3>
-                    <p>100GB de almacenamiento</p>
-                    <p class="text-lg font-bold mt-2">$0/mes</p>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow-md">
-                    <h3 class="text-xl font-semibold">Pro</h3>
-                    <p>1TB de almacenamiento</p>
-                    <p class="text-lg font-bold mt-2">$9.99/mes</p>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow-md">
-                    <h3 class="text-xl font-semibold">Empresarial</h3>
-                    <p>Almacenamiento ilimitado</p>
-                    <p class="text-lg font-bold mt-2">$29.99/mes</p>
-                </div>
+                @foreach ($planes as $plan)
+                    <div class="plan">
+                        <div class="plan-header">
+                            <h3 class="text-xl font-semibold">{{ $plan->nombre }}</h3>
+                        </div>
+                        <div class="plan-body">
+                            <p class="text-black plan-storage">{{ $plan->almacenamiento }} GB</p>
+                        </div>
+                        <div class="plan-footer">
+                            <p class="plan-price">Bs.{{ $plan->precio }}/{{ $plan->periodo_meses }} meses</p>
+                        </div>
+                    </div>
+                @endforeach
             </div>
         </div>
     </section>
+
     <section id="contact" class="max-w-6xl mx-auto py-16 text-center text-white">
         <h2 class="text-3xl font-bold">Contáctanos</h2>
-        <p class="mt-2">Si tienes alguna duda, contáctanos en <strong>contacto@cloudstorage.com</strong></p>
+        <p class="mt-2">Si tienes alguna duda, contáctanos en <strong>contacto@UPDS.com</strong></p>
     </section>
 
-    <footer class="bg-white text-purple-600 text-center py-4">
-        <p>&copy; 2025 Cloud Storage. Todos los derechos reservados.</p>
+    <footer class="bg-white text-gray-400 text-center py-4">
+        <p>&copy; 2025 MyCloud. Todos los derechos reservados.</p>
     </footer>
 </body>
 </html>

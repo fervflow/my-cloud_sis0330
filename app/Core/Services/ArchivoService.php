@@ -1,33 +1,30 @@
 <?php
 namespace App\Core\Services;
-use App\Core\Archivos;
+
+use App\Core\Dtos\ArchivoDTO;
 use App\Models\ArchivoModel;
+use GuzzleHttp\Psr7\Request;
 
-class ArchivoService
-{
+class ArchivoService {
 
-    public function add(Archivos $archivo)
-    {
+    public function add(ArchivoDTO $archivo) {
         return ArchivoModel::create($archivo->toArray());
     }
 
-    public function getArchivos()
-    {
+    public function getArchivos() {
         return ArchivoModel::all();
     }
-/*
-    public function findUserByEmail(string $email)
-    {
-        return ArchivoModel::where('correo', $email)->first();
-    }
-*/
-    public function createArchivo(array $data)
-    {
+
+    public function createArchivo(array $data) {
         return ArchivoModel::create($data);
     }
 
-    public function edit()
-    {
+    public function edit(int $id, array $data) {
+        $archivo = ArchivoModel::find($id);
+        if ($archivo) {
+            $archivo->update($data);
+            return $archivo;
+        }
+        return null;
     }
-
 }
