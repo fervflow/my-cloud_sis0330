@@ -26,16 +26,21 @@
                 </tr>
             </thead>
             <tbody>
-                <tr class="bg-gray-100">
-                    <td class="p-2">Documento word</td>
-                    <td class="p-2">14 febrero 2024</td>
-                    <td class="p-2">20 Bytes</td>
-                    <td class="p-2">⋮</td>
-                </tr>
+                @forelse($archivosUsuario as $archivoUsuario)
+                    <tr class="bg-gray-100">
+                        <td class="p-2">{{ $archivoUsuario->archivo->nombre }}</td>
+                        <td class="p-2">{{ $archivoUsuario->archivo->updated_at->format('d M Y') }}</td>
+                        <td class="p-2">{{ number_format($archivoUsuario->archivo->tamanio / 1048576, 2) }} MB</td>
+                        <td class="p-2">⋮</td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="4" class="p-2 text-center">No hay archivos subidos</td>
+                    </tr>
+                @endforelse
             </tbody>
         </table>
     </div>
 </main>
-
 
 @endsection

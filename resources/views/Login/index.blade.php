@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login</title>
+  <link rel="icon" href="{{ asset('Img/Logo.ico') }}" type="image/x-icon">
   <!-- Vincula el archivo de Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
@@ -13,8 +14,9 @@
 
   <div class="max-w-4xl w-full bg-white shadow-lg rounded-lg flex overflow-hidden">
     <!-- Sección de la imagen (logo) -->
-    <div class="w-1/2 bg-purple-600 flex items-center justify-center p-8">
+    <div class="w-1/2 bg-[#5c15ea] flex items-center justify-center p-8 flex-col">
         <img src="{{ asset('Img/Logo1.png') }}" class="h-40 mx-auto" alt="Mi Cloud Logo">
+        <h1 class="text-white text-4xl font-bold mt-4">MY CLOUD</h1>
     </div>
 
     <!-- Sección del formulario de login -->
@@ -40,7 +42,7 @@
         <!-- Botones de Ingresar y Registrarse -->
         <div class="flex justify-between items-center">
           <button type="submit"
-            class="w-full bg-purple-600 text-white p-3 rounded-md hover:bg-purple-900 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            class="w-full bg-[#5c15ea] text-white p-3 rounded-md hover:bg-[#4a0db8] focus:outline-none focus:ring-2 focus:ring-blue-500">
             Ingresar
           </button>
         </div>

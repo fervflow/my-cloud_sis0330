@@ -19,7 +19,7 @@ class ArchivoModel extends Model
     protected $fillable = [
         'nombre',
         'ruta',
-        'tamaño',
+        'tamanio',
         'tipo',
         'fecha_expiracion',
     ];
