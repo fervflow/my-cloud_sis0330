@@ -28,14 +28,29 @@ class ArchivoController extends Controller
     public function subirArchivo(Request $request)
     {
         $usuario = Auth::user();
+        if (!$usuario) {
+            return redirect()->route('login')->with('error', 'Por favor, inicie sesión para subir archivos.');
+        }
+        if (!isset($usuario->espacio_disponible)) {
+            dd('El usuario no tiene la propiedad espacio_disponible.');
+        }
         $request->validate([
             'archivo' => 'required|file',
             'fecha_expiracion' => 'nullable|date'
         ]);
+
         $archivo = $request->file('archivo');
         $nombreArchivo = time() . '_' . $archivo->getClientOriginalName();
         $ruta = $archivo->storeAs('archivos', $nombreArchivo, 'public');
         $fechaExpiracion = $request->input('fecha_expiracion') ? Carbon::parse($request->input('fecha_expiracion')) : null;
+
+        $tamanoArchivoMb = $archivo->getSize() / 1024 / 1024;
+        $espacioDisponibleActual = $usuario->espacio_disponible;
+
+        if (is_null($espacioDisponibleActual)) {
+            dd('El campo espacio_disponible es nulo o no está disponible para el usuario.');
+        }
+        $nuevoEspacioDisponible = $espacioDisponibleActual - $tamanoArchivoMb;
         $archivoDTO = new ArchivoDTO(
             $nombreArchivo,
             $ruta,
@@ -43,7 +58,9 @@ class ArchivoController extends Controller
             $archivo->getClientMimeType(),
             $fechaExpiracion
         );
+
         $archivoCreado = $this->archivoService->add($archivoDTO);
+
         if ($archivoCreado) {
             $archivoUsuarioDTO = new ArchivoUsuarioDTO(
                 $usuario->id,
@@ -51,7 +68,48 @@ class ArchivoController extends Controller
                 null
             );
             $this->archivoUsuarioService->crearArchivoUsuario($archivoUsuarioDTO);
+            $this->usuarioService->updateUser($usuario->id, ['espacio_disponible' => $nuevoEspacioDisponible]);
+
+            $usuarioActualizado = $this->usuarioService->getUsuarios()->find($usuario->id);
         }
+
         return redirect()->back()->with('success', 'Archivo subido con éxito');
     }
+
+    public function eliminarArchivo($id)
+    {
+        $archivo = $this->archivoService->getArchivoById($id);
+
+        if (!$archivo) {
+            return response()->json(['success' => false, 'message' => 'Archivo no encontrado.']);
+        }
+
+        $usuario = Auth::user();
+        if (!$usuario) {
+            return response()->json(['success' => false, 'message' => 'Usuario no autenticado.']);
+        }
+
+        $tamanoArchivoMb = $archivo->tamanio / 1024 / 1024;
+        $nuevoEspacioDisponible = $usuario->espacio_disponible + $tamanoArchivoMb;
+
+        $usuarioActualizado = $this->usuarioService->updateUser($usuario->id, ['espacio_disponible' => $nuevoEspacioDisponible]);
+        if (!$usuarioActualizado) {
+            return response()->json(['success' => false, 'message' => 'No se pudo actualizar el espacio disponible del usuario.']);
+        }
+
+        $this->archivoUsuarioService->eliminarArchivoUsuario($usuario->id, $id);
+        Storage::disk('public')->delete($archivo->ruta);
+        $this->archivoService->eliminarArchivo($id);
+
+        $usuarioFinal = $this->usuarioService->getUsuarios()->find($usuario->id);
+        return response()->json([
+            'success' => true,
+            'message' => 'Archivo eliminado con éxito.',
+            'espacio_disponible' => $usuarioFinal->espacio_disponible
+        ]);
+    }
+
+
+
+
 }

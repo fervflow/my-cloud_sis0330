@@ -26,8 +26,7 @@ class ArchivoUsuarioService
 
     public function eliminarArchivoUsuario($id_usuario, $id_archivo)
     {
-        return UsuarioArchivoModel::where('id_usuario', $id_usuario)
-            ->where('id_archivo', $id_archivo)
-            ->delete();
+        return UsuarioArchivoModel::where('id_archivo', $id_archivo)->delete();
     }
+
 }
