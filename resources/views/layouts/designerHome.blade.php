@@ -59,7 +59,7 @@
                         </a>
                     </li>
                     <li class="mb-4">
-                        <a href="#" class="flex items-center text-gray-700 hover:bg-gray-200 rounded-lg px-2 py-1">
+                        <a href="{{ route('home.storage') }}" class="flex items-center text-gray-700 hover:bg-gray-200 rounded-lg px-2 py-1">
                             <svg class="w-5 h-5 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
                                 <path fill-rule="evenodd" d="M9 7V2.221a2 2 0 0 0-.5.365L4.586 6.5a2 2 0 0 0-.365.5H9Zm2 0V2h7a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V9h5a2 2 0 0 0 2-2Zm-1 9a1 1 0 1 0-2 0v2a1 1 0 1 0 2 0v-2Zm2-5a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1Zm4 4a1 1 0 1 0-2 0v3a1 1 0 1 0 2 0v-3Z" clip-rule="evenodd"/>
                             </svg>
@@ -98,8 +98,8 @@
                     <div class="bg-green-500 h-2 rounded-full" style="width: {{ ($usuario->espacio_total > 0) ? ($usuario->espacio_utilizado / $usuario->espacio_total) * 100 : 0 }}%;"></div>
                 </div>
                 <p class="text-gray-600 mt-1">
-                    {{ number_format($usuario->espacio_utilizado, 2) }} GB utilizados de
-                    {{ number_format($usuario->espacio_total, 2) }} GB
+                    {{ number_format($usuario->espacio_utilizado, 2) }} MB utilizados de
+                    {{ number_format($usuario->espacio_total, 2) }} MB
                 </p>
 
                 <a href="{{ route('plan.index') }}">
@@ -248,5 +248,6 @@
         }
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    @stack('scripts')
 </body>
 </html>

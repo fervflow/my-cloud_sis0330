@@ -13,8 +13,8 @@ class UsuarioDTO extends Authenticatable
         public readonly string $id = '',
         public readonly string $password = '',
         public string $rol = 'usuario',
-        public float $espacio_disponible = 10.00,
-        public float $espacio_total = 10.00
+        public float $espacio_disponible = 1024.00,
+        public float $espacio_total = 10024.00
     ) {}
 
     public static function fromModel(UsuarioModel $model): self {

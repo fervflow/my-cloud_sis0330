@@ -36,11 +36,15 @@ class HomeController extends Controller
 
         return view('Home.index', compact('usuario', 'archivosUsuario'));
     }
+
+    public function storage()
+    {
+        $usuario = Auth::user();
+        return view('Home.almacenamiento', compact('usuario'));
+    }
     public function inicio()
     {
-        // Obtener los planes disponibles
         $planes = $this->planService->getPlans();
-
         return view('Home.dashboard', compact('planes'));
     }
 

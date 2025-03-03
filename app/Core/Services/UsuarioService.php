@@ -95,7 +95,4 @@ class UsuarioService
 
         return true;
     }
-
-
-
 }

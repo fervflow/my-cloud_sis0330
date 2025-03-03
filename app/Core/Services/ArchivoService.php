@@ -27,4 +27,18 @@ class ArchivoService {
         }
         return null;
     }
+    public function getArchivoById($id)
+    {
+        return ArchivoModel::find($id);
+    }
+
+    public function eliminarArchivo($id)
+    {
+        $archivo = ArchivoModel::find($id);
+        if ($archivo) {
+            $archivo->delete();
+        }
+    }
+
+
 }
