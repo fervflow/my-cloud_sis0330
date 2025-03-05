@@ -14,7 +14,7 @@
                     @if($plan->almacenamiento == 200) bg-blue-100 border-2 border-blue-500 @endif
                     @if($plan->almacenamiento == 1000) bg-purple-100 border-2 border-purple-500 @endif">
                     <h3 class="text-lg font-semibold text-gray-800">{{ $plan->nombre }}</h3>
-                    <h4 class="text-lg font-semibold text-gray-600">{{ $plan->almacenamiento }} GB</h4>
+                    <h4 class="text-lg font-semibold text-gray-600">{{ $plan->almacenamiento }} MB</h4>
                     <p class="text-xl font-bold text-gray-800">
                         Bs {{ number_format($plan->precio, 2) }}
                     </p>
@@ -25,9 +25,9 @@
                     </ul>
                     <button
                         class="mt-4 w-full py-2 rounded-lg
-                        @if($plan->almacenamiento == 50) bg-green-500 hover:bg-green-600 text-white @endif
-                        @if($plan->almacenamiento == 200) bg-blue-500 hover:bg-blue-600 text-white @endif
-                        @if($plan->almacenamiento == 1000) bg-purple-500 hover:bg-purple-600 text-white @endif"
+                        @if($plan->almacenamiento == 51200) bg-green-500 hover:bg-green-600 text-white @endif
+                        @if($plan->almacenamiento == 204800) bg-blue-500 hover:bg-blue-600 text-white @endif
+                        @if($plan->almacenamiento == 1024000) bg-purple-500 hover:bg-purple-600 text-white @endif"
                         onclick="openModal({{ $plan->id }})">
                         Adquirir Plan
                     </button>

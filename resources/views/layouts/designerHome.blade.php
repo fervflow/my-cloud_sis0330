@@ -39,9 +39,9 @@
                     </li>
                     <li class="mb-4">
                         <button onclick="document.getElementById('fileInput').click()" class="mt-3 flex items-center text-gray-800 hover:bg-gray-200 rounded-lg px-2 py-1">
-                            <svg class="w-6 h-6 mr-2 text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                              <path stroke="currentColor" stroke-linejoin="round" stroke-width="2" d="M10 3v4a1 1 0 0 1-1 1H5m14-4v16a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V7.914a1 1 0 0 1 .293-.707l3.914-3.914A1 1 0 0 1 9.914 3H18a1 1 0 0 1 1 1Z"/>
-                            </svg>
+                            <svg class="w-5 h-5 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14m-7 7V5"/>
+                              </svg>
                             Subir Archivo
                         </button>
                         <form id="fileForm" action="{{ route('archivo.subir') }}" method="POST" enctype="multipart/form-data" class="hidden">
@@ -51,7 +51,7 @@
                     </li>
                     <br>
                     <li class="mb-4">
-                        <a href="#" class="flex items-center text-gray-700 hover:bg-gray-200 rounded-lg px-2 py-1">
+                        <a href="{{ route('home.recient') }}" class="flex items-center text-gray-700 hover:bg-gray-200 rounded-lg px-2 py-1">
                             <svg class="w-5 h-5 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
                                 <path fill-rule="evenodd" d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm11-4a1 1 0 1 0-2 0v4a1 1 0 0 0 .293.707l3 3a1 1 0 0 0 1.414-1.414L13 11.586V8Z" clip-rule="evenodd"/>
                             </svg>
@@ -95,10 +95,10 @@
             </nav>
             <div class="mt-auto text-sm">
                 <div class="w-full bg-gray-300 rounded-full h-2 relative">
-                    <div class="bg-green-500 h-2 rounded-full" style="width: {{ ($usuario->espacio_total > 0) ? ($usuario->espacio_utilizado / $usuario->espacio_total) * 100 : 0 }}%;"></div>
+                    <div class="bg-green-500 h-2 rounded-full" style="width: {{ ($usuario->espacio_total > 0) ? ($usuario->espacio_disponible / $usuario->espacio_total) * 100 : 0 }}%;"></div>
                 </div>
                 <p class="text-gray-600 mt-1">
-                    {{ number_format($usuario->espacio_utilizado, 2) }} MB utilizados de
+                    {{ number_format($usuario->espacio_disponible, 2) }} MB disp. de
                     {{ number_format($usuario->espacio_total, 2) }} MB
                 </p>
 
