@@ -24,6 +24,23 @@ class ArchivoUsuarioService
         return UsuarioArchivoModel::where('id_usuario', $id_usuario)->get();
     }
 
+    public function obtenerArchivosRecienteUsuario($id_usuario)
+    {
+        return UsuarioArchivoModel::where('id_usuario', $id_usuario)
+            ->with('archivo')
+            ->orderBy('updated_at', 'desc')
+            ->get();
+    }
+
+    public function obtenerArchivosTamanioUsuario($id_usuario)
+    {
+        return UsuarioArchivoModel::where('id_usuario', $id_usuario)
+            ->with('archivo')
+            ->join('archivos', 'usuarios_archivos.id_archivo', '=', 'archivos.id_archivo')
+            ->orderBy('archivos.tamanio', 'desc')
+            ->select('usuarios_archivos.*')
+            ->get();
+    }
     public function eliminarArchivoUsuario($id_usuario, $id_archivo)
     {
         return UsuarioArchivoModel::where('id_archivo', $id_archivo)->delete();

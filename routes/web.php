@@ -8,6 +8,8 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\PlanController;
 use App\Http\Controllers\ArchivoController;
+use App\Http\Controllers\StorageController;
+
 
 Route::get('/', function () {
     return redirect('/inicio');
@@ -19,7 +21,8 @@ Route::prefix('usuarios')->group(function () {
 });
 
 Route::get('/home', [HomeController::class, 'index'])->name('home.index')->middleware('auth');
-Route::get('/home/storage', [HomeController::class, 'storage'])->name('home.storage')->middleware('auth');
+Route::get('/home/storage', [StorageController::class, 'storage'])->name('home.storage')->middleware('auth');
+Route::get('/home/recient', [StorageController::class, 'recient'])->name('home.recient')->middleware('auth');
 
 
 Route::get('/adminuser', function () {
