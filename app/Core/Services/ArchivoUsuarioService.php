@@ -4,6 +4,8 @@ namespace App\Core\Services;
 
 use App\Core\Dtos\ArchivoUsuarioDTO;
 use App\Models\UsuarioArchivoModel;
+use App\Models\CompartirArchivoModel;
+
 
 class ArchivoUsuarioService
 {
@@ -55,5 +57,13 @@ class ArchivoUsuarioService
     {
         return UsuarioArchivoModel::where('id_archivo', $id_archivo)->delete();
     }
+
+    public function obtenerArchivosCompartidos($usuarioId)
+    {
+        return CompartirArchivoModel::where('id_usuario_destino', $usuarioId)
+            ->join('archivos', 'archivos.id_archivo', '=', 'compartir_archivos.id_archivo')
+            ->get(['archivos.*']);
+    }
+
 
 }

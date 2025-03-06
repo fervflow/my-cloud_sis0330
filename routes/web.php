@@ -61,3 +61,5 @@ Route::get('/inicio', [HomeController::class, 'inicio']);
 Route::post('/archivo/subir', [ArchivoController::class, 'subirArchivo'])->name('archivo.subir')->middleware('auth');
 Route::get('/archivo/descargar/{id}', [ArchivoController::class, 'descargarArchivo'])->name('archivo.descargar')->middleware('auth');
 Route::delete('/archivo/eliminar/{id}', [ArchivoController::class, 'eliminarArchivo'])->name('archivo.eliminar')->middleware('auth');
+Route::post('/archivo/compartir', [ArchivoController::class, 'compartirArchivo'])->name('archivo.compartir')->middleware('auth');
+Route::get('/archivo/ver/{id}', [ArchivoController::class, 'verArchivo'])->name('archivo.ver');

@@ -7,8 +7,8 @@
         <div class="flex border rounded-lg overflow-hidden w-1/3 shadow-md">
             <form method="GET" action="{{ route('home.index') }}" class="flex w-full">
                 <input type="text" name="search" value="{{ request('search') }}" placeholder="Buscar archivo"
-                       class="px-4 py-3 w-full border-none outline-none text-gray-800 bg-gray-100 focus:ring-2 focus:ring-blue-500 rounded-l-lg">
-                <button type="submit" class="bg-gray-300 px-4 py-3 text-gray-700 hover:bg-gray-400 rounded-r-lg transition duration-200">
+                       class="px-4 py-3 w-full border-none outline-none text-gray-800 bg-gray-100 focus:ring-2 focus:ring-[#5c15ea] rounded-l-lg">
+                <button type="submit" class="bg-[#5c15ea] px-4 py-3 text-white hover:bg-[#4b0ca1] rounded-r-lg transition duration-200">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
                          xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -18,10 +18,9 @@
             </form>
         </div>
     </div>
-
     <h1 class="text-3xl font-semibold text-gray-700 mb-6">MI ALMACENAMIENTO</h1>
-
     <div class="bg-white shadow-lg p-4 rounded-lg">
+        <h2 class="text-2xl font-semibold text-gray-700 mb-4">Mis Archivos</h2>
         <table class="w-full text-left table-auto">
             <thead>
                 <tr class="border-b bg-gray-50">
@@ -32,13 +31,13 @@
                 </tr>
             </thead>
             <tbody>
-                @forelse($archivosUsuario as $archivoUsuario)
+                @forelse($archivosPropios as $archivoUsuario)
                     <tr class="border-b hover:bg-gray-50 transition duration-200">
                         <td class="p-3 text-sm text-gray-800">{{ $archivoUsuario->archivo->nombre }}</td>
                         <td class="p-3 text-sm text-gray-600">{{ $archivoUsuario->archivo->updated_at->format('d M Y') }}</td>
                         <td class="p-3 text-sm text-gray-600">{{ number_format($archivoUsuario->archivo->tamanio / 1048576, 2) }} MB</td>
                         <td class="p-3 text-center relative">
-                            <button onclick="toggleMenu(this)" class="options-btn text-gray-600 hover:text-gray-800">
+                            <button onclick="toggleMenu(this)" class="options-btn text-[#5c15ea] hover:text-[#4b0ca1]">
                                 ⋮
                             </button>
                             <div class="options-menu hidden absolute right-0 bg-white shadow-md rounded-lg p-2 w-48 mt-2">
@@ -48,7 +47,7 @@
                                     </svg>
                                     Descargar
                                 </a>
-                                <button class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center" onclick="compartirArchivo({{ $archivoUsuario->archivo->id_archivo }})">
+                                <button class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center" onclick="mostrarModalCompartir({{ $archivoUsuario->archivo->id_archivo }})">
                                     <svg class="w-5 h-5 text-gray-700 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12h4m-2 2v-4M4 18v-1a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3v1a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1Zm8-10a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
                                     </svg>
@@ -70,8 +69,52 @@
                 @endforelse
             </tbody>
         </table>
+        <h2 class="text-2xl font-semibold text-gray-700 mb-4">Archivos Compartidos</h2>
+        <table class="w-full text-left table-auto">
+            <thead>
+                <tr class="border-b bg-gray-50">
+                    <th class="p-3 text-sm font-medium text-gray-600">Nombre</th>
+                    <th class="p-3 text-sm font-medium text-gray-600">Última modificación</th>
+                    <th class="p-3 text-sm font-medium text-gray-600">Tamaño Archivo</th>
+                    <th class="p-3 text-sm font-medium text-gray-600"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($archivosCompartidos as $archivoCompartido)
+                    <tr class="border-b hover:bg-gray-50 transition duration-200">
+                        <td class="p-3 text-sm text-gray-800">{{ $archivoCompartido->archivo->nombre }}</td>
+                        <td class="p-3 text-sm text-gray-600">{{ $archivoCompartido->archivo->updated_at->format('d M Y') }}</td>
+                        <td class="p-3 text-sm text-gray-600">{{ number_format($archivoCompartido->archivo->tamanio / 1048576, 2) }} MB</td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="4" class="p-3 text-center text-gray-500">No tienes archivos compartidos.</td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
     </div>
 </main>
+<div id="modalCompartir" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center hidden">
+    <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+        <h2 class="text-lg font-semibold mb-4">Compartir Archivo</h2>
+        <form id="formCompartir" action="{{ route('archivo.compartir') }}" method="POST">
+            @csrf
+            <input type="hidden" id="archivoId" name="archivoId">
+            <div class="mb-4">
+                <label for="correo" class="block text-sm text-gray-600">Correo Electrónico</label>
+                <input type="email" id="correo" name="correo" class="px-4 py-2 w-full border rounded-lg" placeholder="Introduce el correo del destinatario" required>
+            </div>
+            <button type="submit" class="bg-[#5c15ea] text-white px-4 py-2 rounded-lg w-full">Compartir</button>
+            <button type="button" onclick="cerrarModal()" class="bg-red-500 text-white px-4 py-2 rounded-lg w-full mt-4">Cancelar</button>
+        </form>
+        <div class="mt-4">
+            <label for="link" class="block text-sm text-gray-600">Enlace para compartir</label>
+            <input type="text" id="link" class="px-4 py-2 w-full border rounded-lg" readonly>
+            <button onclick="copiarLink()" class="bg-green-500 text-white px-4 py-2 rounded-lg mt-2 w-full">Copiar Enlace</button>
+        </div>
+    </div>
+</div>
 
 @push('scripts')
 <script>
@@ -82,11 +125,25 @@
         });
         menu.classList.toggle('hidden');
     }
+    function mostrarModalCompartir(idArchivo) {
+        document.getElementById('archivoId').value = idArchivo;
+        var enlace = window.location.origin + '/archivo/descargar/' + idArchivo;
+        document.getElementById('link').value = enlace;
+        document.getElementById('modalCompartir').classList.remove('hidden');
+    }
+    function cerrarModal() {
+        document.getElementById('modalCompartir').classList.add('hidden');
+    }
+    function copiarLink() {
+        var linkInput = document.getElementById('link');
+        linkInput.select();
+        document.execCommand('copy');
+        alert('Enlace copiado al portapapeles!');
+    }
     function eliminarArchivo(idArchivo) {
         if (!confirm('¿Estás seguro de que deseas eliminar este archivo?')) {
             return;
         }
-
         fetch(`/archivo/eliminar/${idArchivo}`, {
             method: 'DELETE',
             headers: {
