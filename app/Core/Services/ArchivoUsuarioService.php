@@ -41,6 +41,16 @@ class ArchivoUsuarioService
             ->select('usuarios_archivos.*')
             ->get();
     }
+    public function buscarArchivosPorNombre($id_usuario, $nombre)
+    {
+        return UsuarioArchivoModel::where('id_usuario', $id_usuario)
+            ->whereHas('archivo', function ($query) use ($nombre) {
+                $query->where('nombre', 'LIKE', "%{$nombre}%");
+            })
+            ->with('archivo')
+            ->get();
+    }
+
     public function eliminarArchivoUsuario($id_usuario, $id_archivo)
     {
         return UsuarioArchivoModel::where('id_archivo', $id_archivo)->delete();

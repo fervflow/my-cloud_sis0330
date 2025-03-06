@@ -79,35 +79,30 @@ class ArchivoController extends Controller
     public function eliminarArchivo($id)
     {
         $archivo = $this->archivoService->getArchivoById($id);
-
         if (!$archivo) {
             return response()->json(['success' => false, 'message' => 'Archivo no encontrado.']);
         }
-
         $usuario = Auth::user();
         if (!$usuario) {
             return response()->json(['success' => false, 'message' => 'Usuario no autenticado.']);
         }
-
         $tamanoArchivoMb = $archivo->tamanio / 1024 / 1024;
         $nuevoEspacioDisponible = $usuario->espacio_disponible + $tamanoArchivoMb;
-
-        $usuarioActualizado = $this->usuarioService->updateUser($usuario->id, ['espacio_disponible' => $nuevoEspacioDisponible]);
-        if (!$usuarioActualizado) {
-            return response()->json(['success' => false, 'message' => 'No se pudo actualizar el espacio disponible del usuario.']);
+        try {
+            $this->usuarioService->updateUser($usuario->id, ['espacio_disponible' => $nuevoEspacioDisponible]);
+            $this->archivoUsuarioService->eliminarArchivoUsuario($usuario->id, $id);
+            Storage::disk('public')->delete($archivo->ruta);
+            $this->archivoService->eliminarArchivo($id);
+            return response()->json([
+                'success' => true,
+                'message' => 'Archivo eliminado con éxito.',
+                'espacio_disponible' => $nuevoEspacioDisponible
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => 'Error eliminando el archivo: ' . $e->getMessage()]);
         }
-
-        $this->archivoUsuarioService->eliminarArchivoUsuario($usuario->id, $id);
-        Storage::disk('public')->delete($archivo->ruta);
-        $this->archivoService->eliminarArchivo($id);
-
-        $usuarioFinal = $this->usuarioService->getUsuarios()->find($usuario->id);
-        return response()->json([
-            'success' => true,
-            'message' => 'Archivo eliminado con éxito.',
-            'espacio_disponible' => $usuarioFinal->espacio_disponible
-        ]);
     }
+
 
     public function descargarArchivo($id)
     {

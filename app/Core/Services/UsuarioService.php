@@ -95,4 +95,11 @@ class UsuarioService
 
         return true;
     }
+    public function updateEspacioDisponible($usuarioId, $nuevoEspacioDisponible)
+    {
+        $usuario = UsuarioModel::findOrFail($usuarioId);
+        $usuario->espacio_disponible = $nuevoEspacioDisponible;
+        $usuario->save();
+    }
+
 }
