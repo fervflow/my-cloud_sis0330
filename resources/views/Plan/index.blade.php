@@ -9,10 +9,10 @@
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             @foreach($planes as $plan)
-                <div class="bg-white p-5 rounded-lg shadow-md text-center
+                <div class="p-5 rounded-lg shadow-md text-center
                     @if($plan->almacenamiento == 50) bg-green-100 border-2 border-green-500 @endif
-                    @if($plan->almacenamiento == 200) bg-blue-100 border-2 border-blue-500 @endif
-                    @if($plan->almacenamiento == 1000) bg-purple-100 border-2 border-purple-500 @endif">
+                    @if($plan->almacenamiento == 200) @endif
+                    @if($plan->almacenamiento == 1000) @endif">
                     <h3 class="text-lg font-semibold text-gray-800">{{ $plan->nombre }}</h3>
                     <h4 class="text-lg font-semibold text-gray-600">{{ $plan->almacenamiento }} MB</h4>
                     <p class="text-xl font-bold text-gray-800">
@@ -26,8 +26,8 @@
                     <button
                         class="mt-4 w-full py-2 rounded-lg
                         @if($plan->almacenamiento == 51200) bg-green-500 hover:bg-green-600 text-white @endif
-                        @if($plan->almacenamiento == 204800) bg-blue-500 hover:bg-blue-600 text-white @endif
-                        @if($plan->almacenamiento == 1024000) bg-purple-500 hover:bg-purple-600 text-white @endif"
+                        @if($plan->almacenamiento == 204800) @endif
+                        @if($plan->almacenamiento == 1024000) @endif"
                         onclick="openModal({{ $plan->id }})">
                         Adquirir Plan
                     </button>
@@ -37,7 +37,7 @@
     </div>
 </body>
 
-<div id="confirmModal" class="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center hidden">
+<div id="confirmModal" class="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center">
     <div class="bg-white p-8 rounded-lg shadow-md w-1/3">
         <h3 class="text-xl font-semibold text-gray-800 mb-4">Confirmar Adquisición</h3>
         <p class="text-gray-600 mb-4">¿Estás seguro de que deseas adquirir este plan?</p>

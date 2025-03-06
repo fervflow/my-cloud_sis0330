@@ -9,7 +9,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\PlanController;
 use App\Http\Controllers\ArchivoController;
 use App\Http\Controllers\StorageController;
-
+use App\Http\Controllers\CarpetaController;
 
 Route::get('/', function () {
     return redirect('/inicio');
@@ -61,3 +61,5 @@ Route::get('/inicio', [HomeController::class, 'inicio']);
 Route::post('/archivo/subir', [ArchivoController::class, 'subirArchivo'])->name('archivo.subir')->middleware('auth');
 Route::get('/archivo/descargar/{id}', [ArchivoController::class, 'descargarArchivo'])->name('archivo.descargar')->middleware('auth');
 Route::delete('/archivo/eliminar/{id}', [ArchivoController::class, 'eliminarArchivo'])->name('archivo.eliminar')->middleware('auth');
+
+Route::get('/carpetas', [CarpetaController::class, 'index'])->name('carpeta.index');

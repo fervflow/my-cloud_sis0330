@@ -16,7 +16,6 @@
             <div class="flex items-center mb-6">
                 <img src="{{ asset('Img/logo.png') }}" class="h-20 mx-auto" alt="Mi Cloud Logo">
             </div>
-
             <div class="text-center mb-5">
                 <p class="text-gray-800 font-semibold">Usuario: {{ auth()->user()->nombres }} {{ auth()->user()->apellidos }}</p>
             </div>
@@ -32,8 +31,10 @@
                         </a>
                     </li>
                     <li class="mb-4">
-                        <a href="#" class="flex items-center text-gray-700 hover:bg-gray-200 rounded-lg px-2 py-1">
-                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10l1-1m0 0l7-7m-7 7h11m4 0a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V10a2 2 0 012-2h11m0 0l-1 1"></path></svg>
+                        <a href="{{ route('carpeta.index') }}" class="flex items-center text-gray-700 hover:bg-gray-200 rounded-lg px-2 py-1">
+                            <svg class="w-5 h-5 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m4 12 8-8 8 8M6 10.5V19a1 1 0 0 0 1 1h3v-3a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3h3a1 1 0 0 0 1-1v-8.5"/>
+                              </svg>
                             Crear carpeta
                         </a>
                     </li>
