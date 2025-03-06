@@ -101,7 +101,7 @@
                             <h3 class="text-xl font-semibold">{{ $plan->nombre }}</h3>
                         </div>
                         <div class="plan-body">
-                            <p class="text-black plan-storage">{{ $plan->almacenamiento }} GB</p>
+                            <p class="text-black plan-storage">{{ number_format($plan->almacenamiento / 1024, 2) }} GB</p>
                         </div>
                         <div class="plan-footer">
                             <p class="plan-price">Bs.{{ $plan->precio }}/{{ $plan->periodo_meses }} meses</p>

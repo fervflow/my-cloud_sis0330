@@ -28,7 +28,6 @@ class ArchivoController extends Controller
         $this->archivoUsuarioService = $archivoUsuarioService;
         $this->compartirArchivoService = $compartirArchivoService;
     }
-
     public function subirArchivo(Request $request)
     {
         $usuario = Auth::user();
@@ -42,27 +41,36 @@ class ArchivoController extends Controller
             'archivo' => 'required|file',
             'fecha_expiracion' => 'nullable|date'
         ]);
-
         $archivo = $request->file('archivo');
-        $nombreArchivo = time() . '_' . $archivo->getClientOriginalName();
-        $ruta = $archivo->storeAs('archivos', $nombreArchivo, 'public');
-        $fechaExpiracion = $request->input('fecha_expiracion') ? Carbon::parse($request->input('fecha_expiracion')) : null;
-
-        $tamanoArchivoMb = $archivo->getSize() / 1024 / 1024;
+        $nombreOriginal = $archivo->getClientOriginalName();
+        $nombreArchivo = pathinfo($nombreOriginal, PATHINFO_FILENAME) . '.zip';
+        $rutaZip = storage_path('app/public/archivos/' . $nombreArchivo);
+        $zip = new \ZipArchive();
+        if ($zip->open($rutaZip, \ZipArchive::CREATE) === TRUE) {
+            $zip->addFile($archivo->getRealPath(), $nombreOriginal);
+            $zip->close();
+        } else {
+            return redirect()->back()->with('error', 'Error al comprimir el archivo.');
+        }
+        $tamanoArchivoMb = filesize($rutaZip) / 1024 / 1024;
         $espacioDisponibleActual = $usuario->espacio_disponible;
-
         if (is_null($espacioDisponibleActual)) {
             dd('El campo espacio_disponible es nulo o no está disponible para el usuario.');
         }
+        if ($tamanoArchivoMb > $espacioDisponibleActual) {
+            unlink($rutaZip);
+            return redirect()->back()->with('error', 'No tienes suficiente espacio disponible.');
+        }
         $nuevoEspacioDisponible = $espacioDisponibleActual - $tamanoArchivoMb;
+        $rutaEnDB = 'archivos/' . $nombreArchivo;  // Guardamos la ruta en la base de datos con el nombre del archivo comprimido
+        $fechaExpiracion = $request->input('fecha_expiracion') ? Carbon::parse($request->input('fecha_expiracion')) : null;
         $archivoDTO = new ArchivoDTO(
             $nombreArchivo,
-            $ruta,
-            $archivo->getSize(),
-            $archivo->getClientMimeType(),
+            $rutaEnDB,
+            filesize($rutaZip),
+            'application/zip',
             $fechaExpiracion
         );
-
         $archivoCreado = $this->archivoService->add($archivoDTO);
 
         if ($archivoCreado) {
@@ -73,12 +81,11 @@ class ArchivoController extends Controller
             );
             $this->archivoUsuarioService->crearArchivoUsuario($archivoUsuarioDTO);
             $this->usuarioService->updateUser($usuario->id, ['espacio_disponible' => $nuevoEspacioDisponible]);
-
-            $usuarioActualizado = $this->usuarioService->getUsuarios()->find($usuario->id);
         }
-
-        return redirect()->back()->with('success', 'Archivo subido con éxito');
+        return redirect()->back()->with('success', 'Archivo subido y comprimido con éxito.');
     }
+
+
 
     public function eliminarArchivo($id)
     {
@@ -136,16 +143,28 @@ class ArchivoController extends Controller
         $archivo = $this->archivoService->getArchivoById($id);
         if (!$archivo) {
             return redirect()->back()->with('error', 'Archivo no encontrado.');
-
         }
-        $rutaArchivo = storage_path("app/public/{$archivo->ruta}");
-        if (!file_exists($rutaArchivo)) {
-            return redirect()->back()->with('error', 'El archivo no existe en el servidor.');
-
+        $rutaZip = storage_path("app/public/{$archivo->ruta}");
+        if (!file_exists($rutaZip)) {
+            return redirect()->back()->with('error', 'El archivo comprimido no existe en el servidor.');
         }
-        return response()->download($rutaArchivo, $archivo->nombre);
+        $rutaDescomprimir = storage_path('app/public/descomprimidos/' . time());
+        $zip = new \ZipArchive();
+        if ($zip->open($rutaZip) === TRUE) {
+            $zip->extractTo($rutaDescomprimir);
+            $zip->close();
+        } else {
+            return redirect()->back()->with('error', 'Error al descomprimir el archivo.');
+        }
+        $archivos = scandir($rutaDescomprimir);
+        foreach ($archivos as $archivoDescomprimido) {
+            if ($archivoDescomprimido !== '.' && $archivoDescomprimido !== '..') {
+                $rutaFinal = $rutaDescomprimir . '/' . $archivoDescomprimido;
+                return response()->download($rutaFinal, $archivoDescomprimido)->deleteFileAfterSend(true);
+            }
+        }
+        return redirect()->back()->with('error', 'No se encontró el archivo descomprimido.');
     }
-
 
     public function verArchivo($id)
     {
