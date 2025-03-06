@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\RegisterUsuarioRequest;
 use Illuminate\Support\Facades\Log;
+use Wavey\Sweetalert\Sweetalert;
+
 
 class LoginController extends Controller
 {
@@ -37,9 +39,11 @@ class LoginController extends Controller
         if ($usuarioDto && Hash::check($request->input('password'), $usuarioDto->password)) {
             Auth::login($usuarioDto->toModel());
             Log::info('LOGIN Correcto');
+            Sweetalert::success('Bienvenido', 'Has iniciado sesión correctamente');
             return redirect()->intended('/home');
         }
 
+        Sweetalert::error('Error', 'Credenciales incorrectas'); // Mensaje de error
         return back()->withErrors(['correo' => 'Credenciales incorrectas']);
     }
 

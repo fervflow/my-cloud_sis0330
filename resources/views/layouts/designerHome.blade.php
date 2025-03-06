@@ -6,6 +6,7 @@
     <title>Mi Cloud</title>
     <link rel="icon" href="{{ asset('Img/Logo.ico') }}" type="image/x-icon">
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body class="bg-gray-100 font-sans">
@@ -240,6 +241,7 @@
         }
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    @include('sweetalert::sweetalert')
     @stack('scripts')
 </body>
 </html>
