@@ -66,14 +66,18 @@ class PlanController extends Controller
     {
         $usuario = Auth::user();
         $planUsuario = PlanUsuarioModel::where('id_usuario', $usuario->id)->first();
-
         if ($planUsuario) {
             return redirect()->route('plan.index')->with('error', 'Ya tienes un plan adquirido.');
         }
-
         $plan = PlanModel::findOrFail($planId);
         $fechaPago = now()->toDateString();
         $fechaRenovacion = now()->addMonths($plan->periodo_meses)->toDateString();
+        $espacioTotalActual = $usuario->espacio_total;
+        $espacioDisponibleActual = $usuario->espacio_disponible;
+        $nuevoEspacioTotal = $plan->almacenamiento;
+        $diferenciaEspacio = $nuevoEspacioTotal - $espacioTotalActual;
+        $nuevoEspacioDisponible = $espacioDisponibleActual + $diferenciaEspacio;
+        $nuevoEspacioDisponible = min($nuevoEspacioDisponible, $nuevoEspacioTotal);
         $planUsuarioDTO = new PlanUsuarioDTO(
             id: '',
             id_usuario: $usuario->id,
@@ -83,9 +87,9 @@ class PlanController extends Controller
             esta_pagado: false
         );
         $this->planUsuarioService->asignarOActualizarPlan($planUsuarioDTO);
-        $this->usuarioService->updateEspacioTotal($usuario->id, $plan->almacenamiento);
+        $this->usuarioService->updateEspacioTotal($usuario->id, $nuevoEspacioTotal);
+        $this->usuarioService->updateEspacioDisponible($usuario->id, $nuevoEspacioDisponible);
+
         return redirect()->route('plan.index')->with('success', 'Plan adquirido exitosamente.');
     }
-
-
 }

@@ -5,9 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mi Cloud</title>
     <link rel="icon" href="{{ asset('Img/Logo.ico') }}" type="image/x-icon">
-    <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body class="bg-gray-100 font-sans">
@@ -16,7 +14,6 @@
             <div class="flex items-center mb-6">
                 <img src="{{ asset('Img/logo.png') }}" class="h-20 mx-auto" alt="Mi Cloud Logo">
             </div>
-
             <div class="text-center mb-5">
                 <p class="text-gray-800 font-semibold">Usuario: {{ auth()->user()->nombres }} {{ auth()->user()->apellidos }}</p>
             </div>
@@ -95,7 +92,9 @@
             </nav>
             <div class="mt-auto text-sm">
                 <div class="w-full bg-gray-300 rounded-full h-2 relative">
-                    <div class="bg-green-500 h-2 rounded-full" style="width: {{ ($usuario->espacio_total > 0) ? ($usuario->espacio_disponible / $usuario->espacio_total) * 100 : 0 }}%;"></div>
+                    <div class="w-full bg-gray-300 rounded-full h-2 relative">
+                        <div class="bg-green-500 h-2 rounded-full" style="width: {{ ($usuario->espacio_total > 0) ? (($usuario->espacio_total - $usuario->espacio_disponible) / $usuario->espacio_total) * 100 : 0 }}%;"></div>
+                    </div>
                 </div>
                 <p class="text-gray-600 mt-1">
                     {{ number_format($usuario->espacio_disponible, 2) }} MB disp. de
@@ -107,9 +106,7 @@
                         Obtener más almacenamiento
                     </button>
                 </a>
-
             </div>
-
         </aside>
 
         <!-- Main Content -->
@@ -157,7 +154,6 @@
         </div>
     </div>
 
-    <!-- Modal para Confirmar el Archivo -->
     <div id="fileModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 items-center justify-center">
         <div class="bg-white p-6 rounded-lg shadow-lg w-96">
             <h3 class="text-lg font-semibold">Confirmar archivo</h3>
@@ -176,9 +172,6 @@
             <button id="cancelUpload" class="bg-gray-500 text-white px-4 py-2 rounded mt-4 ml-2">Cancelar</button>
         </div>
     </div>
-
-
-
 
     <script>
         document.getElementById('fileInput').addEventListener('change', function(event) {
@@ -207,7 +200,6 @@
             }
             form.submit();
         });
-
 
         document.getElementById('expirationCheckbox').addEventListener('change', function() {
             var expirationDateDiv = document.getElementById('expirationDateDiv');

@@ -23,19 +23,29 @@ class HomeController extends Controller
         $this->planService = $planService;
     }
 
-    public function index()
+    public function index(Request $request)
     {
         $usuarioModel = Auth::user();
         if (!$usuarioModel instanceof UsuarioModel) {
             abort(403, 'Usuario no autorizado');
         }
+
         $usuario = UsuarioDTO::fromModel($usuarioModel);
         $usuario->espacio_utilizado = 0;
         $usuario->espacio_total = $usuario->espacio_total ?: 5;
-        $archivosUsuario = $this->archivoUsuarioService->obtenerArchivosUsuario($usuarioModel->id);
 
-        return view('Home.index', compact('usuario', 'archivosUsuario'));
+        $busqueda = $request->input('search');
+
+        // Filtrar archivos si hay un término de búsqueda
+        if ($busqueda) {
+            $archivosUsuario = $this->archivoUsuarioService->buscarArchivosPorNombre($usuarioModel->id, $busqueda);
+        } else {
+            $archivosUsuario = $this->archivoUsuarioService->obtenerArchivosUsuario($usuarioModel->id);
+        }
+
+        return view('Home.index', compact('usuario', 'archivosUsuario', 'busqueda'));
     }
+
 
     public function storage()
     {

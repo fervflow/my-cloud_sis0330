@@ -22,7 +22,7 @@
 
         <!-- Almacenamiento -->
         <div class="mb-4">
-            <label for="almacenamiento" class="block text-sm font-medium text-gray-700">Almacenamiento (GB)</label>
+            <label for="almacenamiento" class="block text-sm font-medium text-gray-700">Almacenamiento (MB)</label>
             <input type="number" step="0.01" id="almacenamiento" name="almacenamiento" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-600" required>
         </div>
 
