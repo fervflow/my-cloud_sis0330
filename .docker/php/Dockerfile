@@ -11,7 +11,9 @@ RUN apk add --no-cache \
     postgresql-dev \
     nodejs \
     npm \
-    && docker-php-ext-install pdo pdo_pgsql
+    libzip-dev \
+    && docker-php-ext-configure zip \
+    && docker-php-ext-install zip pdo pdo_pgsql
 
 # Copy Composer binary from the official Composer image
 COPY --from=composer/composer:latest-bin /composer /usr/bin/composer

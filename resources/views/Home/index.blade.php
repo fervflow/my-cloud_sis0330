@@ -85,6 +85,9 @@
                         <td class="p-3 text-sm text-gray-800">{{ $archivoCompartido->archivo->nombre }}</td>
                         <td class="p-3 text-sm text-gray-600">{{ $archivoCompartido->archivo->updated_at->format('d M Y') }}</td>
                         <td class="p-3 text-sm text-gray-600">{{ number_format($archivoCompartido->archivo->tamanio / 1048576, 2) }} MB</td>
+                        <td class="p-4 text-right">
+                            <a href="{{ route('archivo.descargar', $archivoCompartido->archivo->id_archivo) }}" class="text-blue-600 hover:text-blue-800 text-sm font-semibold">Descargar</a>
+                        </td>
                     </tr>
                 @empty
                     <tr>
