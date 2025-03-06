@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Core\Dtos;
-
+use App\Models\CompartirArchivoModel;
 class ArchivoUsuarioDTO
 {
     public $id_usuario;
@@ -44,4 +44,12 @@ class ArchivoUsuarioDTO
     {
         $this->id_carpeta = $id_carpeta;
     }
+
+    public function obtenerArchivosCompartidos($usuarioId)
+    {
+        return CompartirArchivoModel::where('id_usuario_destino', $usuarioId)
+            ->join('archivos', 'archivos.id_archivo', '=', 'compartir_archivos.id_archivo')
+            ->get(['archivos.*']);
+    }
+
 }

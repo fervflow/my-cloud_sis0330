@@ -8,6 +8,8 @@ use App\Core\Services\ArchivoUsuarioService;
 use Illuminate\Support\Facades\Auth;
 use App\Core\Dtos\ArchivoDTO;
 use App\Core\Dtos\ArchivoUsuarioDTO;
+use App\Core\Dtos\CompartirArchivoDTO;
+use App\Core\Services\CompartirArchivoService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
@@ -17,12 +19,14 @@ class ArchivoController extends Controller
     protected $archivoService;
     protected $usuarioService;
     protected $archivoUsuarioService;
+    protected $compartirArchivoService;
 
-    public function __construct(ArchivoService $archivoService, UsuarioService $usuarioService, ArchivoUsuarioService $archivoUsuarioService)
+    public function __construct(ArchivoService $archivoService, UsuarioService $usuarioService, ArchivoUsuarioService $archivoUsuarioService, CompartirArchivoService $compartirArchivoService)
     {
         $this->usuarioService = $usuarioService;
         $this->archivoService = $archivoService;
         $this->archivoUsuarioService = $archivoUsuarioService;
+        $this->compartirArchivoService = $compartirArchivoService;
     }
 
     public function subirArchivo(Request $request)
@@ -103,6 +107,29 @@ class ArchivoController extends Controller
         }
     }
 
+    public function compartirArchivo(Request $request)
+    {
+        $request->validate([
+            'correo' => 'required|email',
+            'archivoId' => 'required|exists:archivos,id_archivo',
+        ]);
+        $usuario = Auth::user();
+        $archivoId = $request->input('archivoId');
+        $correo = $request->input('correo');
+        $archivo = $this->archivoService->getArchivoById($archivoId);
+
+        if (!$archivo) {
+            return back()->with('error', 'Archivo no encontrado.');
+        }
+        $usuarioDestino = $this->usuarioService->findUserByEmail($correo);
+
+        if (!$usuarioDestino) {
+            return back()->with('error', 'El correo proporcionado no está registrado.');
+        }
+        $compartirArchivoDTO = new CompartirArchivoDTO($usuario->id, $usuarioDestino->id, $archivo->id_archivo);
+        $this->compartirArchivoService->compartirArchivo($compartirArchivoDTO);
+        return back()->with('success', 'El archivo ha sido compartido con éxito.');
+    }
 
     public function descargarArchivo($id)
     {
@@ -118,6 +145,19 @@ class ArchivoController extends Controller
         }
         return response()->download($rutaArchivo, $archivo->nombre);
     }
+
+
+    public function verArchivo($id)
+    {
+        $archivo = $this->archivoService->getArchivoById($id);
+
+        if (!$archivo) {
+            return redirect()->back()->with('error', 'Archivo no encontrado.');
+        }
+
+        return response()->file(storage_path("app/public/{$archivo->ruta}"));
+    }
+
 
 
 }

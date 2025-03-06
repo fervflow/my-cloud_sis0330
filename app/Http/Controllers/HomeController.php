@@ -23,7 +23,7 @@ class HomeController extends Controller
         $this->planService = $planService;
     }
 
-    public function index(Request $request)
+    /*public function index(Request $request)
     {
         $usuarioModel = Auth::user();
         if (!$usuarioModel instanceof UsuarioModel) {
@@ -44,7 +44,34 @@ class HomeController extends Controller
         }
 
         return view('Home.index', compact('usuario', 'archivosUsuario', 'busqueda'));
+    }*/
+
+    public function index(Request $request)
+{
+    $usuarioModel = Auth::user();
+    if (!$usuarioModel instanceof UsuarioModel) {
+        abort(403, 'Usuario no autorizado');
     }
+    $usuario = UsuarioDTO::fromModel($usuarioModel);
+    $usuario->espacio_utilizado = 0;
+    $usuario->espacio_total = $usuario->espacio_total ?: 5;
+    $busqueda = $request->input('search');
+
+    $archivosUsuario = [];
+    if ($busqueda) {
+        $archivosUsuario = $this->archivoUsuarioService->buscarArchivosPorNombre($usuarioModel->id, $busqueda);
+    } else {
+        $archivosUsuario = $this->archivoUsuarioService->obtenerArchivosUsuario($usuarioModel->id);
+    }
+    $archivosCompartidos = $this->archivoUsuarioService->obtenerArchivosCompartidos($usuarioModel->id);
+    $archivosPropios = $archivosUsuario;
+    $archivos = $archivosPropios->merge($archivosCompartidos);
+
+    return view('Home.index', compact('usuario', 'archivos', 'busqueda', 'archivosPropios', 'archivosCompartidos'));
+}
+
+
+
 
 
     public function storage()
