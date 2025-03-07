@@ -16,7 +16,7 @@ return new class extends Migration
             $table->id('id_archivo');
             $table->string('nombre');
             $table->string('ruta');
-            $table->integer('peso');
+            $table->integer('tamaño');
             $table->string('tipo');
             $table->date('fecha_expiracion')->nullable();
             $table->timestamps();
