@@ -12,20 +12,21 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\PlanUsuarioModel;
 use App\Models\PlanModel;
 use Illuminate\Support\Facades\Log;
-
+use Wavey\Sweetalert\Sweetalert;
 
 class PlanController extends Controller
 {
-    //
     protected $planService;
     protected $planUsuarioService;
     protected $usuarioService;
+
     public function __construct(PlanService $planService, PlanUsuarioService $planUsuarioService, UsuarioService $usuarioService)
     {
         $this->planService = $planService;
         $this->planUsuarioService = $planUsuarioService;
         $this->usuarioService = $usuarioService;
     }
+
     public function index()
     {
         $usuario = Auth::user();
@@ -33,6 +34,7 @@ class PlanController extends Controller
 
         return view('Plan.index', compact('usuario', 'planes'));
     }
+
     public function create()
     {
         $usuario = Auth::user();
@@ -48,6 +50,7 @@ class PlanController extends Controller
             'periodo_meses' => 'required|integer',
             'esta_activo' => 'required|boolean',
         ]);
+
         $planDTO = new PlanDTO(
             id: '',
             nombre: $request->input('nombre'),
@@ -59,16 +62,21 @@ class PlanController extends Controller
 
         $planModel = $planDTO->toModel();
         $planModel->save();
-        return redirect()->route('plan.index')->with('success', 'Plan creado exitosamente.');
+
+        Sweetalert::success('Éxito', 'Plan creado exitosamente.')->persistent('Cerrar');
+        return redirect()->route('plan.index');
     }
 
     public function adquirir($planId)
     {
         $usuario = Auth::user();
         $planUsuario = PlanUsuarioModel::where('id_usuario', $usuario->id)->first();
+
         if ($planUsuario) {
-            return redirect()->route('plan.index')->with('error', 'Ya tienes un plan adquirido.');
+            Sweetalert::error('Error', 'Ya tienes un plan adquirido.')->persistent('Cerrar');
+            return redirect()->route('plan.index');
         }
+
         $plan = PlanModel::findOrFail($planId);
         $fechaPago = now()->toDateString();
         $fechaRenovacion = now()->addMonths($plan->periodo_meses)->toDateString();
@@ -78,6 +86,7 @@ class PlanController extends Controller
         $diferenciaEspacio = $nuevoEspacioTotal - $espacioTotalActual;
         $nuevoEspacioDisponible = $espacioDisponibleActual + $diferenciaEspacio;
         $nuevoEspacioDisponible = min($nuevoEspacioDisponible, $nuevoEspacioTotal);
+
         $planUsuarioDTO = new PlanUsuarioDTO(
             id: '',
             id_usuario: $usuario->id,
@@ -86,10 +95,12 @@ class PlanController extends Controller
             fecha_renovacion: $fechaRenovacion,
             esta_pagado: false
         );
+
         $this->planUsuarioService->asignarOActualizarPlan($planUsuarioDTO);
         $this->usuarioService->updateEspacioTotal($usuario->id, $nuevoEspacioTotal);
         $this->usuarioService->updateEspacioDisponible($usuario->id, $nuevoEspacioDisponible);
 
-        return redirect()->route('plan.index')->with('success', 'Plan adquirido exitosamente.');
+        Sweetalert::success('Éxito', 'Plan adquirido exitosamente.')->persistent('Cerrar');
+        return redirect()->route('plan.index');
     }
 }

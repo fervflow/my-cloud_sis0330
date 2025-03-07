@@ -27,19 +27,32 @@
                     <th class="p-3 text-sm font-medium text-gray-600">Nombre</th>
                     <th class="p-3 text-sm font-medium text-gray-600">Última modificación</th>
                     <th class="p-3 text-sm font-medium text-gray-600">Tamaño Archivo</th>
+                    <th class="p-3 text-sm font-medium text-gray-600">Compartido con:</th>
                     <th class="p-3 text-sm font-medium text-gray-600"></th>
                 </tr>
             </thead>
             <tbody>
                 @forelse($archivosPropios as $archivoUsuario)
                     <tr class="border-b hover:bg-gray-50 transition duration-200">
-                        <td class="p-3 text-sm text-gray-800">{{ $archivoUsuario->archivo->nombre }}</td>
-                        <td class="p-3 text-sm text-gray-600">{{ $archivoUsuario->archivo->updated_at->format('d M Y') }}</td>
+                        <td class="p-3 text-sm text-gray-800">
+                            {{ $archivoUsuario->archivo->nombre }}
+                            @if($archivoUsuario->archivo->fecha_expiracion)
+                                <svg class="w-6 h-6 inline-block ml-2 text-red-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                                    <path fill-rule="evenodd" d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm11-4a1 1 0 1 0-2 0v4a1 1 0 0 0 .293.707l3 3a1 1 0 0 0 1.414-1.414L13 11.586V8Z" clip-rule="evenodd"/>
+                                </svg>
+                            @endif
+                        </td>
+                        <td class="p-3 text-sm text-gray-800">{{ $archivoUsuario->archivo->updated_at->format('d M Y') }}</td>
                         <td class="p-3 text-sm text-gray-600">{{ number_format($archivoUsuario->archivo->tamanio / 1048576, 2) }} MB</td>
+                        <td>
+                            @if($archivoUsuario->correosCompartidos)
+                                <div class="text-sm text-gray-500 mt-1">
+                                    {{ $archivoUsuario->correosCompartidos }}
+                                </div>
+                            @endif
+                        </td>
                         <td class="p-3 text-center relative">
-                            <button onclick="toggleMenu(this)" class="options-btn text-[#5c15ea] hover:text-[#4b0ca1]">
-                                ⋮
-                            </button>
+                            <button onclick="toggleMenu(this)" class="options-btn text-[#5c15ea] hover:text-[#4b0ca1]">⋮</button>
                             <div class="options-menu hidden absolute right-0 bg-white shadow-md rounded-lg p-2 w-48 mt-2">
                                 <a href="{{ route('archivo.descargar', $archivoUsuario->archivo->id_archivo) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center">
                                     <svg class="w-5 h-5 text-gray-700 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
@@ -52,6 +65,12 @@
                                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12h4m-2 2v-4M4 18v-1a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3v1a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1Zm8-10a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
                                     </svg>
                                     Compartir
+                                </button>
+                                <button class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center" onclick="mostrarModalFechaExpiracion({{ $archivoUsuario->archivo->id_archivo }})">
+                                    <svg class="w-5 h-5 text-gray-700 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v14m7-7H5" />
+                                    </svg>
+                                    Agregar Fecha de Expiración
                                 </button>
                                 <button class="block px-4 py-2 text-sm text-red-600 hover:bg-red-100 flex items-center" onclick="eliminarArchivo({{ $archivoUsuario->archivo->id_archivo }})">
                                     <svg class="w-5 h-5 text-red-600 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
@@ -82,7 +101,14 @@
             <tbody>
                 @forelse($archivosCompartidos as $archivoCompartido)
                     <tr class="border-b hover:bg-gray-50 transition duration-200">
-                        <td class="p-3 text-sm text-gray-800">{{ $archivoCompartido->archivo->nombre }}</td>
+                        <td class="p-3 text-sm text-gray-800">
+                            {{ $archivoCompartido->archivo->nombre }}
+                            @if($archivoCompartido->archivo->fecha_expiracion)
+                                <svg class="w-6 h-6 inline-block ml-2 text-red-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                                    <path fill-rule="evenodd" d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm11-4a1 1 0 1 0-2 0v4a1 1 0 0 0 .293.707l3 3a1 1 0 0 0 1.414-1.414L13 11.586V8Z" clip-rule="evenodd"/>
+                                </svg>
+                            @endif
+                        </td>
                         <td class="p-3 text-sm text-gray-600">{{ $archivoCompartido->archivo->updated_at->format('d M Y') }}</td>
                         <td class="p-3 text-sm text-gray-600">{{ number_format($archivoCompartido->archivo->tamanio / 1048576, 2) }} MB</td>
                         <td class="p-4 text-right">
@@ -118,6 +144,24 @@
         </div>
     </div>
 </div>
+<div id="modalFechaExpiracion" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center hidden">
+    <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+        <h2 class="text-lg font-semibold mb-4">Fecha de Expiración</h2>
+        <form id="formFechaExpiracion" action="{{ route('archivo.agregarFechaExpiracion') }}" method="POST">
+            @csrf
+            <input type="hidden" id="archivoIdFecha" name="archivoId">
+            <div class="mb-4">
+                <label for="fecha_expiracion" class="block text-sm text-gray-600">Fecha de Expiración</label>
+                <input type="date" id="fecha_expiracion" name="fecha_expiracion" class="px-4 py-2 w-full border rounded-lg">
+            </div>
+            <div class="flex justify-between">
+                <button type="submit" class="bg-[#5c15ea] text-white px-4 py-2 rounded-lg w-full">Guardar</button>
+                <button type="button" onclick="quitarFechaExpiracion()" class="bg-red-500 text-white px-4 py-2 rounded-lg w-full ml-2">Quitar Fecha</button>
+            </div>
+            <button type="button" onclick="cerrarModalFechaExpiracion()" class="bg-gray-500 text-white px-4 py-2 rounded-lg w-full mt-4">Cancelar</button>
+        </form>
+    </div>
+</div>
 
 @push('scripts')
 <script>
@@ -134,8 +178,35 @@
         document.getElementById('link').value = enlace;
         document.getElementById('modalCompartir').classList.remove('hidden');
     }
+    function mostrarModalFechaExpiracion(idArchivo) {
+        document.getElementById('archivoIdFecha').value = idArchivo;
+        document.getElementById('modalFechaExpiracion').classList.remove('hidden');
+    }
+
+    function cerrarModalFechaExpiracion() {
+        document.getElementById('modalFechaExpiracion').classList.add('hidden');
+    }
     function cerrarModal() {
         document.getElementById('modalCompartir').classList.add('hidden');
+    }
+    function quitarFechaExpiracion() {
+        document.getElementById('fecha_expiracion').value = '';
+        document.getElementById('formFechaExpiracion').submit();
+    }
+    function mostrarMensajeExpiracion(fechaExpiracion) {
+        let fechaExp = new Date(fechaExpiracion);
+        let fechaActual = new Date();
+        fechaExp.setHours(0, 0, 0, 0);
+        fechaActual.setHours(0, 0, 0, 0);
+        let diferencia = fechaExp - fechaActual;
+        let diasRestantes = Math.floor(diferencia / (1000 * 60 * 60 * 24));
+        if (diasRestantes > 0) {
+            alert(`Fecha de expiración: ${diasRestantes} días`);
+        } else if (diasRestantes === 0) {
+            alert("La fecha de expiración es hoy.");
+        } else {
+            alert("El archivo ya ha expirado.");
+        }
     }
     function copiarLink() {
         var linkInput = document.getElementById('link');
@@ -161,15 +232,13 @@
                 setTimeout(() => {
                     location.reload();
                 }, 500);
-            } else {
-                alert('Error al eliminar el archivo: ' + (data.message || 'Intente nuevamente.'));
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('Hubo un error inesperado al eliminar el archivo');
         });
     }
+
     document.addEventListener('click', function(event) {
         if (!event.target.closest('.options-btn') && !event.target.closest('.options-menu')) {
             document.querySelectorAll('.options-menu').forEach(m => m.classList.add('hidden'));
@@ -177,5 +246,4 @@
     });
 </script>
 @endpush
-
 @endsection
