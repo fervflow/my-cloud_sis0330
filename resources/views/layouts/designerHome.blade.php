@@ -143,9 +143,11 @@
         </div>
         <h2 class="text-lg font-bold mt-3">¡Hola, {{ $usuario->nombres }}!</h2>
         <div class="mt-4 w-full">
-            <a href="#" class="w-full py-2 text-[#5c15ea] font-semibold hover:bg-gray-200 rounded-md">
+
+            <button  class="w-full py-2 text-[#5c15ea] font-semibold hover:bg-gray-200 rounded-md" data-bs-toggle="modal" data-bs-target="#editarModal{{ $usuario->id }}">
                 Editar perfil
-            </a>
+            </button>
+
             <form action="{{ route('logout') }}" method="POST" class="mt-2">
                 @csrf
                 <button type="submit" class="w-full py-2 bg-red-600 text-white font-semibold mt-2 rounded-md hover:bg-red-700">
@@ -154,6 +156,71 @@
             </form>
         </div>
     </div>
+   <!--modal para actualizar datos de-->
+   <div class="modal fade" id="editarModal{{ $usuario->id }}" tabindex="-1" aria-labelledby="editarModalLabel{{ $usuario->id }}" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editarModalLabel{{ $usuario->id }}">Editar Perfil</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="{{ route('home.perfil', $usuario->id) }}" method="POST">
+                    @csrf
+                    @method('PUT')
+                    <div class="mb-4">
+                        <label for="nombres" class="block text-sm font-semibold text-gray-600">Nombres</label>
+                        <input type="text" id="nombres" name="nombres" value="{{ $usuario->nombres }}" class="w-full p-2 border rounded-md mt-1" required>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="apellidos" class="block text-sm font-semibold text-gray-600">Apellidos</label>
+                        <input type="text" id="apellidos" name="apellidos" value="{{ $usuario->apellidos }}" class="w-full p-2 border rounded-md mt-1" required>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="correo" class="block text-sm font-semibold text-gray-600">Correo</label>
+                        <input type="email" id="correo" name="correo" value="{{ $usuario->correo }}" class="w-full p-2 border rounded-md mt-1" required>
+                    </div>
+
+                    <!-- Checkbox para actualizar contraseña -->
+                    <div class="mb-4">
+                        <label for="updatePassword" class="inline-flex items-center text-sm font-semibold text-gray-600">
+                            <input type="checkbox" id="updatePassword" class="mr-2" />
+                            <span>¿Quieres actualizar tu contraseña?</span>
+                        </label>
+                    </div>
+
+                    <!-- Campo de contraseña (oculto por defecto) -->
+                    <div id="passwordFields" class="mb-4 hidden">
+                        <label for="password" class="block text-sm font-semibold text-gray-600">Nueva Contraseña</label>
+                        <input type="password" id="password" name="password" class="w-full p-2 border rounded-md mt-1">
+
+                        <label for="password_confirmation" class="block text-sm font-semibold text-gray-600 mt-2">Confirmar Contraseña</label>
+                        <input type="password" id="password_confirmation" name="password_confirmation" class="w-full p-2 border rounded-md mt-1">
+                    </div>
+
+                    <div class="mt-4">
+                        <button type="submit" class="bg-purple-600 text-white py-2 px-6 rounded-md hover:bg-purple-700">Actualizar Perfil</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Mostrar/ocultar los campos de contraseña según el estado del checkbox
+    document.getElementById('updatePassword').addEventListener('change', function() {
+        const passwordFields = document.getElementById('passwordFields');
+        if (this.checked) {
+            passwordFields.classList.remove('hidden');
+        } else {
+            passwordFields.classList.add('hidden');
+        }
+    });
+</script>
+
 
     <div id="fileModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 items-center justify-center">
         <div class="bg-white p-6 rounded-lg shadow-lg w-96">

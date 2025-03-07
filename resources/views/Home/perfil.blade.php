@@ -2,8 +2,9 @@
 
 @section('content')
 <main class="flex-1 p-6">
+    @foreach ($usuarios as $usuario)
     <h1 class="text-2xl font-bold text-gray-500 mb-4">Editar Perfil</h1>
-    <form action="#" method="POST">
+    <form action="{{ route('home.perfil', $usuario->id) }}" method="POST">
         @csrf
         @method('PUT')
         <div class="mb-4">
@@ -42,6 +43,7 @@
             <button type="submit" class="bg-purple-600 text-white py-2 px-6 rounded-md hover:bg-purple-700">Actualizar Perfil</button>
         </div>
     </form>
+    @endforeach
 </main>
 
 <script>

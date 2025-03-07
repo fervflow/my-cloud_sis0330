@@ -158,6 +158,20 @@ class ArchivoController extends Controller
             return response()->json(['success' => false, 'message' => 'Error eliminando el archivo: ' . $e->getMessage()]);
         }
     }
+    public function descargarArchivo($id)
+    {
+        $archivo = $this->archivoService->getArchivoById($id);
+        if (!$archivo) {
+            return redirect()->back()->with('error', 'Archivo no encontrado.');
+
+        }
+        $rutaArchivo = storage_path("app/public/{$archivo->ruta}");
+        if (!file_exists($rutaArchivo)) {
+            return redirect()->back()->with('error', 'El archivo no existe en el servidor.');
+
+        }
+        return response()->download($rutaArchivo, $archivo->nombre);
+    }
 
     public function compartirArchivo(Request $request)
     {
