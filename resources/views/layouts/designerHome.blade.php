@@ -13,7 +13,7 @@
     <div class="flex h-screen">
         <aside class="w-64 bg-white p-4 shadow-md flex flex-col">
             <div class="flex items-center mb-6">
-                <img src="{{ asset('Img/logo.png') }}" class="h-20 mx-auto" alt="Mi Cloud Logo">
+                <img src="{{ asset(path: 'Img/logo.png') }}" class="h-20 mx-auto" alt="Mi Cloud Logo">
             </div>
             <div class="text-center mb-5">
                 <p class="text-gray-800 font-semibold">Usuario: {{ auth()->user()->nombres }} {{ auth()->user()->apellidos }}</p>
