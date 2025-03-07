@@ -68,9 +68,10 @@
                                 </button>
                                 <button class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center" onclick="mostrarModalFechaExpiracion({{ $archivoUsuario->archivo->id_archivo }})">
                                     <svg class="w-5 h-5 text-gray-700 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v14m7-7H5" />
-                                    </svg>
-                                    Agregar Fecha de Expiración
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                                      </svg>
+
+                                    Editar Fecha de Expiración
                                 </button>
                                 <button class="block px-4 py-2 text-sm text-red-600 hover:bg-red-100 flex items-center" onclick="eliminarArchivo({{ $archivoUsuario->archivo->id_archivo }})">
                                     <svg class="w-5 h-5 text-red-600 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">

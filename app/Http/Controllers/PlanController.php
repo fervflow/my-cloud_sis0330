@@ -73,19 +73,36 @@ class PlanController extends Controller
         $planUsuario = PlanUsuarioModel::where('id_usuario', $usuario->id)->first();
 
         if ($planUsuario) {
-            Sweetalert::error('Error', 'Ya tienes un plan adquirido.')->persistent('Cerrar');
+            if ($planUsuario->id_plan == $planId) {
+                Sweetalert::error('Error', 'Ya tienes este plan adquirido.')->persistent('Cerrar');
+                return redirect()->route('plan.index');
+            }
+            $plan = PlanModel::findOrFail($planId);
+            $fechaPago = now()->toDateString();
+            $fechaRenovacion = now()->addMonths($plan->periodo_meses)->toDateString();
+            $espacioTotalActual = $usuario->espacio_total;
+            $espacioDisponibleActual = $usuario->espacio_disponible;
+            $nuevoEspacioTotal = $plan->almacenamiento;
+            $diferenciaEspacio = $nuevoEspacioTotal - $espacioTotalActual;
+            $nuevoEspacioDisponible = $espacioDisponibleActual + $diferenciaEspacio;
+            $nuevoEspacioDisponible = min($nuevoEspacioDisponible, $nuevoEspacioTotal);
+
+            $planUsuario->id_plan = $planId;
+            $planUsuario->fecha_pago = $fechaPago;
+            $planUsuario->fecha_renovacion = $fechaRenovacion;
+            $planUsuario->esta_pagado = false;
+            $planUsuario->save();
+
+            $this->usuarioService->updateEspacioTotal($usuario->id, $nuevoEspacioTotal);
+            $this->usuarioService->updateEspacioDisponible($usuario->id, $nuevoEspacioDisponible);
+
+            Sweetalert::success('Éxito', 'Tu plan ha sido actualizado exitosamente.')->persistent('Cerrar');
             return redirect()->route('plan.index');
         }
 
         $plan = PlanModel::findOrFail($planId);
         $fechaPago = now()->toDateString();
         $fechaRenovacion = now()->addMonths($plan->periodo_meses)->toDateString();
-        $espacioTotalActual = $usuario->espacio_total;
-        $espacioDisponibleActual = $usuario->espacio_disponible;
-        $nuevoEspacioTotal = $plan->almacenamiento;
-        $diferenciaEspacio = $nuevoEspacioTotal - $espacioTotalActual;
-        $nuevoEspacioDisponible = $espacioDisponibleActual + $diferenciaEspacio;
-        $nuevoEspacioDisponible = min($nuevoEspacioDisponible, $nuevoEspacioTotal);
 
         $planUsuarioDTO = new PlanUsuarioDTO(
             id: '',
@@ -97,10 +114,11 @@ class PlanController extends Controller
         );
 
         $this->planUsuarioService->asignarOActualizarPlan($planUsuarioDTO);
-        $this->usuarioService->updateEspacioTotal($usuario->id, $nuevoEspacioTotal);
-        $this->usuarioService->updateEspacioDisponible($usuario->id, $nuevoEspacioDisponible);
+        $this->usuarioService->updateEspacioTotal($usuario->id, $plan->almacenamiento);
+        $this->usuarioService->updateEspacioDisponible($usuario->id, $plan->almacenamiento);
 
         Sweetalert::success('Éxito', 'Plan adquirido exitosamente.')->persistent('Cerrar');
         return redirect()->route('plan.index');
     }
+
 }
