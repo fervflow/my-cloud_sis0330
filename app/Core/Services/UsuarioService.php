@@ -102,4 +102,31 @@ class UsuarioService
         $usuario->save();
     }
 
+
+    public function editUser(int $id, array $data)
+    {
+        $usuarioModel = UsuarioModel::find($id);
+
+        if (!$usuarioModel) {
+            return false;
+        }
+
+        if (isset($data['password']) && !empty($data['password'])) {
+            $data['password'] = bcrypt($data['password']);
+        }
+
+        foreach ($data as $key => $value) {
+            if (empty($value)) {
+                unset($data[$key]);
+            }
+        }
+        // Actualizar el usuario
+        try {
+            $usuarioModel->update($data);
+        } catch (\Exception $e) {
+            return false;
+        }
+
+        return UsuarioDTO::fromModel($usuarioModel);
+    }
 }

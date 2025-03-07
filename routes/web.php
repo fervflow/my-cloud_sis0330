@@ -18,6 +18,7 @@ Route::get('/', function () {
 Route::prefix('usuarios')->group(function () {
     Route::get('/', [UsuarioController::class, 'index']);
     Route::post('/', [UsuarioController::class, 'store']);
+
 });
 
 Route::get('/home', [HomeController::class, 'index'])->name('home.index')->middleware('auth');
@@ -34,17 +35,19 @@ Route::middleware([App\Http\Middleware\AdminRoleMiddleware::class])->group(funct
     Route::get('/plan/create', [PlanController::class, 'create'])->name('plan.create');
     Route::post('/plan/store', [PlanController::class, 'store'])->name('plan.store');
     Route::put('/usuarios/{id}', [UsuarioController::class, 'update'])->name('usuarios.update');
+    Route::put('/perfil/{id}', [UsuarioController::class, 'updateUse'])->name('home.perfil');
 });
 
 
 Route::get('/login', [LoginController::class, 'index'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
 
-
+/*Route::put('/perfil/{id}', [UsuarioController::class, 'edit'])->name('home.perfil')->middleware('auth');*/
 
 Route::middleware('guest')->group(function () {
     Route::get('/register', [LoginController::class, 'showRegisterForm'])->name('register');
     Route::post('/register', [LoginController::class, 'register']);
+
 });
 
 Route::post('/logout', function () {Auth::logout();return redirect('/');})->name('logout');

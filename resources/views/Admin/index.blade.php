@@ -29,6 +29,15 @@
                 <div class="flex flex-col items-center pb-10">
                     <div class="bg-[#5c15ea] text-white w-20 h-20 flex items-center justify-center rounded-full text-4xl font-bold mt-2">
                         {{ strtoupper(substr($user->nombres, 0, 1)) }}
+                        <br>
+                        <h5 class="mb-1 text-xl font-medium text-gray-900 ">Bonnie</h5>
+                    </div>
+                    <div class="mt-auto text-sm">
+                        <p class="text-gray-700">Almacenamiento 50%</p>
+                        <div class="w-full bg-gray-300 rounded-full h-2 relative">
+                            <div class="bg-green-500 h-2 rounded-full" style="width: 50%;"></div>
+                        </div>
+                        <p class="text-gray-600 mt-1">10 Gb utilizados de 20 Gb</p>
                     </div>
                     <h5 class="mb-1 text-xl font-medium text-gray-900 mt-4">{{ $user->nombres }} {{ $user->apellidos }}</h5>
                     <p class="mt-2 text-gray-700 text-sm">{{ $user->correo }}</p>

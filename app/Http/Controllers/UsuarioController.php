@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Core\Services\UsuarioService;
 use Illuminate\Http\JsonResponse;
-
+use App\Models\UsuarioModel;
 class UsuarioController extends Controller
 {
     protected $usuarioService;
@@ -76,5 +76,23 @@ class UsuarioController extends Controller
             return redirect()->back()->with('error', 'Error al actualizar el usuario.');
         }
     }
-}
 
+    public function updateUse(Request $request, $id)
+    {
+
+        $data = $request->validate([
+            'nombres'             => 'nullable|string',
+            'apellidos'           => 'nullable|string',
+            'correo'              => 'nullable|email',
+            'password'            => 'nullable|string|min:6|confirmed'
+        ]);
+
+        $usuarioActualizado = $this->usuarioService->editUser((int)$id, $data);
+
+        if ($usuarioActualizado) {
+            return redirect()->back()->with('success', 'Usuario actualizado correctamente.');
+        } else {
+            return redirect()->back()->with('error', 'Error al actualizar el usuario.');
+        }
+    }
+}
