@@ -39,11 +39,11 @@ class LoginController extends Controller
         if ($usuarioDto && Hash::check($request->input('password'), $usuarioDto->password)) {
             Auth::login($usuarioDto->toModel());
             Log::info('LOGIN Correcto');
-            Sweetalert::success('Bienvenido', 'Has iniciado sesión correctamente');
+            Sweetalert::success('Bienvenido', 'Has iniciado sesión correctamente')->persistent('Cerrar');
             return redirect()->intended('/home');
         }
 
-        Sweetalert::error('Error', 'Credenciales incorrectas'); // Mensaje de error
+        Sweetalert::error('Error', 'Credenciales incorrectas')->persistent('Cerrar'); // Mensaje de error
         return back()->withErrors(['correo' => 'Credenciales incorrectas']);
     }
 
@@ -68,15 +68,16 @@ class LoginController extends Controller
 
         Log::info("Usuario validado: {$usuarioDto->__toString()}");
 
-        // $nuevoUsuario = $this->listaUsuario->add($usuarioDto, $request->input('password'));
         $nuevoUsuario = $this->usuarioService->createUser($usuarioDto);
 
-        Log::info("Usuario registrado: {$nuevoUsuario->__tostring()}");
+        Log::info("Usuario registrado: {$nuevoUsuario->__toString()}");
 
         if ($nuevoUsuario) {
-            return redirect('/login')->with('success', 'Usuario registrado correctamente. Ahora puedes iniciar sesión.');
+            Sweetalert::success('Éxito', 'Usuario registrado correctamente. Ahora puedes iniciar sesión.')->persistent('Cerrar');
+            return redirect('/login');
         } else {
             Log::error('LOGIN CONTROLLER - REGISTER: ERROR no nuevoUsuario');
+            Sweetalert::error('Error', 'No se pudo registrar el usuario.')->persistent('Cerrar');
             return back()->withErrors(['error' => 'No se pudo registrar el usuario.']);
         }
     }
