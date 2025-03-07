@@ -51,4 +51,20 @@ class UsuarioModel extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    public function carpetas()
+    {
+        return $this->belongsToMany(CarpetaModel::class, 'usuarios_carpetas', 'id_usuario', 'id_carpeta');
+    }
+    protected static function booted()
+    {
+        static::created(function ($usuario) {
+            // Crear una nueva carpeta o seleccionar una existente
+            $carpeta = CarpetaModel::firstOrCreate([
+                'nombre' => 'Carpeta Principal',
+            ]);
+
+            // Asociar la carpeta al usuario
+            $usuario->carpetas()->attach($carpeta->id_carpeta);
+        });
+    }
 }

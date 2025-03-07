@@ -30,11 +30,29 @@
                         </a>
                     </li>
                     <li class="mb-4">
-                        <a href="#" class="flex items-center text-gray-700 hover:bg-gray-200 rounded-lg px-2 py-1">
-                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10l1-1m0 0l7-7m-7 7h11m4 0a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V10a2 2 0 012-2h11m0 0l-1 1"></path></svg>
+                        <button onclick="abrirModalCrearCarpeta()" class="flex items-center text-gray-700 hover:bg-gray-200 rounded-lg px-2 py-1">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 10l1-1m0 0l7-7m-7 7h11m4 0a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V10a2 2 0 012-2h11m0 0l-1 1"></path>
+                            </svg>
                             Crear carpeta
-                        </a>
+                        </button>
                     </li>
+                    <div id="crearCarpetaModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 items-center justify-center">
+                        <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+                            <h3 class="text-lg font-semibold mb-4">Crear Carpeta</h3>
+                            <form id="crearCarpetaForm" action="{{ route('carpeta.crear') }}" method="POST">
+                                @csrf
+                                <div class="mb-4">
+                                    <label for="nombreCarpeta" class="block text-sm text-gray-600">Nombre de la carpeta</label>
+                                    <input type="text" id="nombreCarpeta" name="nombreCarpeta" class="px-4 py-2 w-full border rounded-lg" placeholder="Introduce el nombre de la carpeta" required>
+                                </div>
+                                <div class="flex justify-end">
+                                    <button type="button" onclick="cerrarModalCrearCarpeta()" class="bg-gray-500 text-white px-4 py-2 rounded-lg mr-2">Cancelar</button>
+                                    <button type="submit" class="bg-[#5c15ea] text-white px-4 py-2 rounded-lg">Crear</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                     <li class="mb-4">
                         <button onclick="document.getElementById('fileInput').click()" class="mt-3 flex items-center text-gray-800 hover:bg-gray-200 rounded-lg px-2 py-1">
                             <svg class="w-5 h-5 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
@@ -240,6 +258,29 @@
             document.getElementById('fileForm').submit();
         }
     </script>
+    <!-- -->
+    <script>
+        // Abrir el modal de creación de carpeta
+        function abrirModalCrearCarpeta() {
+            document.getElementById('crearCarpetaModal').classList.remove('hidden');
+            document.getElementById('crearCarpetaModal').classList.add('flex');
+        }
+
+        // Cerrar el modal de creación de carpeta
+        function cerrarModalCrearCarpeta() {
+            document.getElementById('crearCarpetaModal').classList.add('hidden');
+            document.getElementById('crearCarpetaModal').classList.remove('flex');
+        }
+
+        // Cerrar el modal si se hace clic fuera de él
+        document.addEventListener('click', function(event) {
+            let modal = document.getElementById('crearCarpetaModal');
+            if (event.target === modal) {
+                cerrarModalCrearCarpeta();
+            }
+        });
+    </script>
+    <!-- -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     @include('sweetalert::sweetalert')
     @stack('scripts')

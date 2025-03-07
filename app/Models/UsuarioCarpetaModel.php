@@ -28,4 +28,5 @@ class UsuarioCarpetaModel extends Model
     {
         return $this->belongsTo(CarpetaModel::class, 'id_carpeta', 'id_carpeta');
     }
+    
 }

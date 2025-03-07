@@ -97,6 +97,45 @@
             </tbody>
         </table>
     </div>
+    <div class="bg-white shadow-lg p-4 rounded-lg">
+        <!-- Sección de Carpetas -->
+        <h2 class="text-2xl font-semibold text-gray-700 mb-4">Mis Carpetas</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            @forelse($carpetas as $carpeta)
+                <div class="bg-gray-50 p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <svg class="w-6 h-6 text-gray-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path>
+                            </svg>
+                            <span class="text-gray-800">{{ $carpeta->nombre }}</span>
+                        </div>
+                        <button onclick="toggleMenu(this)" class="text-gray-600 hover:text-gray-800">
+                            ⋮
+                        </button>
+                        <div class="options-menu hidden absolute bg-white shadow-md rounded-lg p-2 w-48">
+                            <button class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left">Abrir</button>
+                            <button class="block px-4 py-2 text-sm text-red-600 hover:bg-red-100 w-full text-left">Eliminar</button>
+                        </div>
+                    </div>
+
+                    <!-- Formulario para subir archivos a esta carpeta -->
+                    <form action="{{ route('subir.archivo.carpeta') }}" method="POST" enctype="multipart/form-data" class="mt-4">
+                        @csrf
+                        <input type="hidden" name="id_carpeta" value="{{ $carpeta->id_carpeta }}">
+                        <div class="flex items-center gap-2">
+                            <input type="file" name="archivo" required class="border p-2 rounded-lg w-full">
+                            <button type="submit" class="bg-[#5c15ea] text-white px-4 py-2 rounded-lg hover:bg-[#4b0ca1] transition duration-200">
+                                Subir
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            @empty
+                <p class="text-gray-500">No hay carpetas creadas.</p>
+            @endforelse
+        </div>
+    </div>
 </main>
 <div id="modalCompartir" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center hidden">
     <div class="bg-white p-6 rounded-lg shadow-lg w-96">

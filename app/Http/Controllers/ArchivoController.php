@@ -177,6 +177,79 @@ class ArchivoController extends Controller
         return response()->file(storage_path("app/public/{$archivo->ruta}"));
     }
 
+ /////////
+ public function subirArchivoACarpeta(Request $request)
+ {
+     // Validar la solicitud
+     $request->validate([
+         'archivo' => 'required|file',
+         'id_carpeta' => 'required|exists:carpetas,id_carpeta',
+     ]);
 
+     // Obtener el usuario autenticado
+     $usuario = Auth::user();
+     if (!$usuario) {
+         return redirect()->route('login')->with('error', 'Por favor, inicie sesión para subir archivos.');
+     }
+
+     // Obtener el archivo y la carpeta
+     $archivo = $request->file('archivo');
+     $idCarpeta = $request->input('id_carpeta');
+
+     // Comprimir el archivo (si es necesario)
+     $nombreOriginal = $archivo->getClientOriginalName();
+     $nombreArchivo = pathinfo($nombreOriginal, PATHINFO_FILENAME) . '.zip';
+     $rutaZip = storage_path('app/public/archivos/' . $nombreArchivo);
+
+     $zip = new \ZipArchive();
+     if ($zip->open($rutaZip, \ZipArchive::CREATE) === TRUE) {
+         $zip->addFile($archivo->getRealPath(), $nombreOriginal);
+         $zip->close();
+     } else {
+         return redirect()->back()->with('error', 'Error al comprimir el archivo.');
+     }
+
+     // Verificar el espacio disponible
+     $tamanoArchivoMb = filesize($rutaZip) / 1024 / 1024;
+     $espacioDisponibleActual = $usuario->espacio_disponible;
+
+     if ($tamanoArchivoMb > $espacioDisponibleActual) {
+         unlink($rutaZip);
+         return redirect()->back()->with('error', 'No tienes suficiente espacio disponible.');
+     }
+
+     // Calcular el nuevo espacio disponible
+     $nuevoEspacioDisponible = $espacioDisponibleActual - $tamanoArchivoMb;
+
+     // Guardar el archivo en la base de datos
+     $rutaEnDB = 'archivos/' . $nombreArchivo;
+     $fechaExpiracion = $request->input('fecha_expiracion') ? Carbon::parse($request->input('fecha_expiracion')) : null;
+
+     $archivoDTO = new ArchivoDTO(
+         $nombreArchivo,
+         $rutaEnDB,
+         filesize($rutaZip),
+         'application/zip',
+         $fechaExpiracion
+     );
+
+     $archivoCreado = $this->archivoService->add($archivoDTO);
+
+     if ($archivoCreado) {
+         // Asociar el archivo al usuario y a la carpeta
+         $archivoUsuarioDTO = new ArchivoUsuarioDTO(
+             $usuario->id,
+             $archivoCreado->id_archivo,
+             $idCarpeta // Asociar el archivo a la carpeta
+         );
+
+         $this->archivoUsuarioService->crearArchivoUsuario($archivoUsuarioDTO);
+
+         // Actualizar el espacio disponible del usuario
+         $this->usuarioService->updateUser($usuario->id, ['espacio_disponible' => $nuevoEspacioDisponible]);
+     }
+
+     return redirect()->back()->with('success', 'Archivo subido y asociado a la carpeta con éxito.');
+ }
 
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Core\Services\UsuarioService;
 use App\Core\Services\PlanService;
 use App\Core\Services\ArchivoUsuarioService;
+use App\Core\Services\CarpetaService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Core\Dtos\UsuarioDTO;
@@ -15,12 +16,14 @@ class HomeController extends Controller
     private $usuarioService;
     private $archivoUsuarioService;
     private $planService;
+    private $carpetaService;
 
-    public function __construct(UsuarioService $usuarioService, ArchivoUsuarioService $archivoUsuarioService, PlanService $planService)
+    public function __construct(UsuarioService $usuarioService, ArchivoUsuarioService $archivoUsuarioService, PlanService $planService, CarpetaService $carpetaService)
     {
         $this->usuarioService = $usuarioService;
         $this->archivoUsuarioService = $archivoUsuarioService;
         $this->planService = $planService;
+        $this->carpetaService = $carpetaService;
     }
 
     /*public function index(Request $request)
@@ -47,27 +50,36 @@ class HomeController extends Controller
     }*/
 
     public function index(Request $request)
-{
-    $usuarioModel = Auth::user();
-    if (!$usuarioModel instanceof UsuarioModel) {
-        abort(403, 'Usuario no autorizado');
-    }
-    $usuario = UsuarioDTO::fromModel($usuarioModel);
-    $usuario->espacio_utilizado = 0;
-    $usuario->espacio_total = $usuario->espacio_total ?: 5;
-    $busqueda = $request->input('search');
+    {
+        $usuarioModel = Auth::user();
+        if (!$usuarioModel instanceof UsuarioModel) {
+            abort(403, 'Usuario no autorizado');
+        }
+        $usuario = UsuarioDTO::fromModel($usuarioModel);
+        $usuario->espacio_utilizado = 0;
+        $usuario->espacio_total = $usuario->espacio_total ?: 5;
+        $busqueda = $request->input('search');
 
-    $archivosUsuario = [];
-    if ($busqueda) {
-        $archivosUsuario = $this->archivoUsuarioService->buscarArchivosPorNombre($usuarioModel->id, $busqueda);
-    } else {
-        $archivosUsuario = $this->archivoUsuarioService->obtenerArchivosUsuario($usuarioModel->id);
-    }
-    $archivosCompartidos = $this->archivoUsuarioService->obtenerArchivosCompartidos($usuarioModel->id);
-    $archivosPropios = $archivosUsuario;
-    $archivos = $archivosPropios->merge($archivosCompartidos);
+        $archivosUsuario = [];
+        if ($busqueda) {
+            $archivosUsuario = $this->archivoUsuarioService->buscarArchivosPorNombre($usuarioModel->id, $busqueda);
+        } else {
+            $archivosUsuario = $this->archivoUsuarioService->obtenerArchivosUsuario($usuarioModel->id);
+        }
+        $archivosCompartidos = $this->archivoUsuarioService->obtenerArchivosCompartidos($usuarioModel->id);
+        $archivosPropios = $archivosUsuario;
+        $archivos = $archivosPropios->merge($archivosCompartidos);
 
-    return view('Home.index', compact('usuario', 'archivos', 'busqueda', 'archivosPropios', 'archivosCompartidos'));
+        $carpetas = $this->carpetaService->obtenerCarpetasPorUsuario($usuarioModel->id);
+
+        return view('Home.index', compact(
+            'usuario',
+            'archivosUsuario',
+            'archivosPropios',
+            'busqueda',
+            'archivosCompartidos',
+            'carpetas'
+        ));
 }
 
 
