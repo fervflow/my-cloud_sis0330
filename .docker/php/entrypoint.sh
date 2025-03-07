@@ -47,9 +47,24 @@ else
     # Install composer dependencies
     echo "Instalando dependencias de Composer..."
     composer install || exit 1
-
-    echo "===>>> CONFIGURACIÓN COMPLETADA."
 fi
+
+echo "Corrigiendo permisos para storage y bootstrap/cache..."
+chmod -R 777 storage bootstrap/cache || exit 1
+chown -R www-data:www-data storage bootstrap/cache || exit 1
+
+echo "Clearing Laravel caches..."
+php artisan cache:clear
+php artisan config:clear
+php artisan view:clear
+php artisan optimize:clear
+
+echo "Regenerating optimized files..."
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+
+echo "========= CONFIGURACIÓN FINALIZADA ========"
 
 # Run the original PHP-FPM command
 exec "$@"
