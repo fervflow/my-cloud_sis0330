@@ -30,4 +30,14 @@ class CompartirArchivoModel extends Model
     {
         return $this->belongsTo(ArchivoModel::class, 'id_archivo', 'id_archivo');
     }
+
+    public function getCorreoUsuarioDestino()
+    {
+        return $this->usuario ? $this->usuario->correo : null;
+    }
+    public function usuarioDestino()
+    {
+        return $this->belongsTo(UsuarioModel::class, 'id_usuario_destino', 'id');
+    }
+
 }

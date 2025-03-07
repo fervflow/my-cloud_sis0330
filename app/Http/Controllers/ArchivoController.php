@@ -13,6 +13,8 @@ use App\Core\Services\CompartirArchivoService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
+use Wavey\Sweetalert\Sweetalert;
+
 
 class ArchivoController extends Controller
 {
@@ -32,26 +34,32 @@ class ArchivoController extends Controller
     {
         $usuario = Auth::user();
         if (!$usuario) {
-            return redirect()->route('login')->with('error', 'Por favor, inicie sesión para subir archivos.');
+            Sweetalert::error('Por favor, inicie sesión para subir archivos.')->persistent('Cerrar');
+            return redirect()->route('login');
         }
         if (!isset($usuario->espacio_disponible)) {
             dd('El usuario no tiene la propiedad espacio_disponible.');
         }
+
         $request->validate([
             'archivo' => 'required|file',
             'fecha_expiracion' => 'nullable|date'
         ]);
+
         $archivo = $request->file('archivo');
         $nombreOriginal = $archivo->getClientOriginalName();
         $nombreArchivo = pathinfo($nombreOriginal, PATHINFO_FILENAME) . '.zip';
         $rutaZip = storage_path('app/public/archivos/' . $nombreArchivo);
+
         $zip = new \ZipArchive();
         if ($zip->open($rutaZip, \ZipArchive::CREATE) === TRUE) {
             $zip->addFile($archivo->getRealPath(), $nombreOriginal);
             $zip->close();
         } else {
-            return redirect()->back()->with('error', 'Error al comprimir el archivo.');
+            Sweetalert::error('Error al comprimir el archivo.')->persistent('Cerrar');
+            return redirect()->back();
         }
+
         $tamanoArchivoMb = filesize($rutaZip) / 1024 / 1024;
         $espacioDisponibleActual = $usuario->espacio_disponible;
         if (is_null($espacioDisponibleActual)) {
@@ -59,11 +67,14 @@ class ArchivoController extends Controller
         }
         if ($tamanoArchivoMb > $espacioDisponibleActual) {
             unlink($rutaZip);
-            return redirect()->back()->with('error', 'No tienes suficiente espacio disponible.');
+            Sweetalert::error('No tienes suficiente espacio disponible.')->persistent('Cerrar');
+            return redirect()->back();
         }
+
         $nuevoEspacioDisponible = $espacioDisponibleActual - $tamanoArchivoMb;
-        $rutaEnDB = 'archivos/' . $nombreArchivo;  // Guardamos la ruta en la base de datos con el nombre del archivo comprimido
+        $rutaEnDB = 'archivos/' . $nombreArchivo;
         $fechaExpiracion = $request->input('fecha_expiracion') ? Carbon::parse($request->input('fecha_expiracion')) : null;
+
         $archivoDTO = new ArchivoDTO(
             $nombreArchivo,
             $rutaEnDB,
@@ -71,8 +82,8 @@ class ArchivoController extends Controller
             'application/zip',
             $fechaExpiracion
         );
-        $archivoCreado = $this->archivoService->add($archivoDTO);
 
+        $archivoCreado = $this->archivoService->add($archivoDTO);
         if ($archivoCreado) {
             $archivoUsuarioDTO = new ArchivoUsuarioDTO(
                 $usuario->id,
@@ -81,10 +92,38 @@ class ArchivoController extends Controller
             );
             $this->archivoUsuarioService->crearArchivoUsuario($archivoUsuarioDTO);
             $this->usuarioService->updateUser($usuario->id, ['espacio_disponible' => $nuevoEspacioDisponible]);
+            Sweetalert::success('Archivo subido y comprimido con éxito.')->persistent('Cerrar');
         }
-        return redirect()->back()->with('success', 'Archivo subido y comprimido con éxito.');
+
+        return redirect()->back();
     }
 
+    public function agregarFechaExpiracion(Request $request)
+    {
+        $request->validate([
+            'archivoId' => 'required|exists:archivos,id_archivo',
+            'fecha_expiracion' => 'nullable|date|after_or_equal:today',
+        ]);
+
+        $archivoId = $request->input('archivoId');
+        $fechaExpiracion = $request->input('fecha_expiracion');
+        $archivo = $this->archivoService->getArchivoById($archivoId);
+
+        if (!$archivo) {
+            Sweetalert::error('Archivo no encontrado.')->persistent('Cerrar');
+            return back();
+        }
+
+        if ($fechaExpiracion) {
+            $archivo->fecha_expiracion = Carbon::parse($fechaExpiracion);
+        } else {
+            $archivo->fecha_expiracion = null;
+        }
+
+        $archivo->save();
+        Sweetalert::success('Fecha de expiración actualizada correctamente.')->persistent('Cerrar');
+        return back();
+    }
 
 
     public function eliminarArchivo($id)
@@ -93,23 +132,29 @@ class ArchivoController extends Controller
         if (!$archivo) {
             return response()->json(['success' => false, 'message' => 'Archivo no encontrado.']);
         }
+
         $usuario = Auth::user();
         if (!$usuario) {
             return response()->json(['success' => false, 'message' => 'Usuario no autenticado.']);
         }
+
         $tamanoArchivoMb = $archivo->tamanio / 1024 / 1024;
         $nuevoEspacioDisponible = $usuario->espacio_disponible + $tamanoArchivoMb;
+
         try {
             $this->usuarioService->updateUser($usuario->id, ['espacio_disponible' => $nuevoEspacioDisponible]);
             $this->archivoUsuarioService->eliminarArchivoUsuario($usuario->id, $id);
             Storage::disk('public')->delete($archivo->ruta);
             $this->archivoService->eliminarArchivo($id);
+
+            Sweetalert::success('Archivo eliminado con éxito.')->persistent('Cerrar');
             return response()->json([
                 'success' => true,
                 'message' => 'Archivo eliminado con éxito.',
                 'espacio_disponible' => $nuevoEspacioDisponible
             ]);
         } catch (\Exception $e) {
+            Sweetalert::error('Error eliminando el archivo: ' . $e->getMessage())->persistent('Cerrar');
             return response()->json(['success' => false, 'message' => 'Error eliminando el archivo: ' . $e->getMessage()]);
         }
     }
@@ -120,22 +165,29 @@ class ArchivoController extends Controller
             'correo' => 'required|email',
             'archivoId' => 'required|exists:archivos,id_archivo',
         ]);
+
         $usuario = Auth::user();
         $archivoId = $request->input('archivoId');
         $correo = $request->input('correo');
         $archivo = $this->archivoService->getArchivoById($archivoId);
 
         if (!$archivo) {
-            return back()->with('error', 'Archivo no encontrado.');
+            SweetAlert::error('Archivo no encontrado.')->persistent('Cerrar');
+            return back();
         }
+
         $usuarioDestino = $this->usuarioService->findUserByEmail($correo);
 
         if (!$usuarioDestino) {
-            return back()->with('error', 'El correo proporcionado no está registrado.');
+            SweetAlert::error('El correo proporcionado no está registrado.')->persistent('Cerrar');
+            return back();
         }
+
         $compartirArchivoDTO = new CompartirArchivoDTO($usuario->id, $usuarioDestino->id, $archivo->id_archivo);
         $this->compartirArchivoService->compartirArchivo($compartirArchivoDTO);
-        return back()->with('success', 'El archivo ha sido compartido con éxito.');
+
+        SweetAlert::success('El archivo ha sido compartido con éxito.')->persistent('Cerrar');
+        return back();
     }
 
     public function descargarArchivo($id)
@@ -169,14 +221,9 @@ class ArchivoController extends Controller
     public function verArchivo($id)
     {
         $archivo = $this->archivoService->getArchivoById($id);
-
         if (!$archivo) {
             return redirect()->back()->with('error', 'Archivo no encontrado.');
         }
-
         return response()->file(storage_path("app/public/{$archivo->ruta}"));
     }
-
-
-
 }
